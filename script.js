@@ -1,73 +1,54 @@
-// Инициализация Telegram Web App
 const tg = window.Telegram.WebApp;
 tg.expand();
+tg.ready();
 
-// Элементы
-const photoInput = document.getElementById('photoInput');
+const docInput = document.getElementById('docInput');
+const selfieInput = document.getElementById('selfieInput');
 const verifyBtn = document.getElementById('verifyBtn');
 const walletInput = document.getElementById('walletInput');
 const stakingBtn = document.getElementById('stakingBtn');
-const status = document.getElementById('status');
+const statusToast = document.getElementById('status');
 
-// Функция показа статуса
-function showStatus(message, type) {
-    status.textContent = message;
-    status.className = `status ${type}`;
-    status.classList.remove('hidden');
-    
-    setTimeout(() => {
-        status.classList.add('hidden');
-    }, 5000);
+function showToast(message) {
+    statusToast.textContent = message;
+    statusToast.classList.remove('hidden');
+    setTimeout(() => statusToast.classList.add('hidden'), 3000);
 }
 
-// Верификация
+// Обработка верификации
 verifyBtn.addEventListener('click', () => {
-    const file = photoInput.files[0];
-    
-    if (!file) {
-        showStatus('❌ Выберите фото для верификации', 'error');
+    if (!docInput.files[0] || !selfieInput.files[0]) {
+        showToast('Пожалуйста, загрузите оба фото');
         return;
     }
 
-    // Отправляем данные боту
-    tg.sendData(JSON.stringify({
+    const data = {
         action: 'verify',
-        fileName: file.name,
-        fileSize: file.size,
-        timestamp: Date.now()
-    }));
+        docName: docInput.files[0].name,
+        selfieName: selfieInput.files[0].name
+    };
 
-    showStatus('✅ Документ отправлен на проверку', 'success');
+    tg.sendData(JSON.stringify(data));
+    showToast('Данные отправлены');
+    
+    setTimeout(() => tg.close(), 1500);
 });
 
-// Подключение стейкинга
+// Обработка стейкинга
 stakingBtn.addEventListener('click', () => {
     const wallet = walletInput.value.trim();
     
-    if (!wallet) {
-        showStatus('❌ Введите адрес кошелька', 'error');
+    if (wallet.length < 10) {
+        showToast('Введите корректный адрес');
         return;
     }
 
-    if (!wallet.startsWith('0x') || wallet.length < 40) {
-        showStatus('❌ Неверный формат адреса кошелька', 'error');
-        return;
-    }
-
-    // Отправляем данные боту
     tg.sendData(JSON.stringify({
         action: 'staking',
-        wallet: wallet,
-        timestamp: Date.now()
+        wallet: wallet
     }));
 
-    showStatus('⏳ Запрос в обработке...', 'processing');
+    showToast('В обработке...');
     
-    // Закрываем приложение через 2 секунды
-    setTimeout(() => {
-        tg.close();
-    }, 2000);
+    setTimeout(() => tg.close(), 2000);
 });
-
-// Настройка темы Telegram
-tg.ready();
