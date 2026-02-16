@@ -53,3 +53,35 @@
     <script src="script.js"></script>
 </body>
 </html>
+<!-- Секция Стейкинга -->
+        <div class="card">
+            <h3>Стейкинг</h3>
+            <p class="hint">Введите адрес кошелька для подключения</p>
+            <div class="input-group">
+                <input type="text" id="walletInput" placeholder="Адрес кошелька (0x...)" class="text-input">
+            </div>
+            <button id="stakingBtn" class="btn btn-outline">Подключить стейкинг</button>
+        </div>
+
+        <!-- Популярные токены -->
+        <div class="card tokens-card">
+            <div class="tokens-header">
+                <div>
+                    <h3>Популярные токены</h3>
+                    <p class="hint">Топ‑5 по рыночной капитализации</p>
+                </div>
+            </div>
+
+            <div class="tokens-tabs">
+                <button class="token-tab active">Top</button>
+                <button class="token-tab">BNB</button>
+                <button class="token-tab">ETH</button>
+                <button class="token-tab">SOL</button>
+            </div>
+
+            <div id="tokensList" class="tokens-list">
+                <!-- Сюда скрипт подставит монеты -->
+            </div>
+        </div>
+
+        <div id="status" class="status-toast hidden"></div>
