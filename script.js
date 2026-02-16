@@ -1,126 +1,60 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
-tg.ready();
 
-const docInput = document.getElementById('docInput');
-const selfieInput = document.getElementById('selfieInput');
+// Элементы
 const verifyBtn = document.getElementById('verifyBtn');
-const walletInput = document.getElementById('walletInput');
 const stakingBtn = document.getElementById('stakingBtn');
-const statusToast = document.getElementById('status');
-
-function showToast(message) {
-    statusToast.textContent = message;
-    statusToast.classList.remove('hidden');
-    setTimeout(() => statusToast.classList.add('hidden'), 3000);
-}
-
-// ============= Обработка верификации =============
-verifyBtn.addEventListener('click', () => {
-    if (!docInput.files[0] || !selfieInput.files[0]) {
-        showToast('❌ Пожалуйста, загрузите оба фото');
-        return;
-    }
-
-    const data = {
-        action: 'verify',
-        docName: docInput.files[0].name,
-        selfieName: selfieInput.files[0].name,
-        timestamp: Date.now()
-    };
-
-    tg.sendData(JSON.stringify(data));
-    showToast('✅ Документы отправлены на проверку');
-    
-    setTimeout(() => tg.close(), 1500);
-});
-
-// ============= Обработка стейкинга =============
-stakingBtn.addEventListener('click', () => {
-    const wallet = walletInput.value.trim();
-    
-    if (wallet.length < 10) {
-        showToast('❌ Введите корректный адрес кошелька');
-        return;
-    }
-
-    tg.sendData(JSON.stringify({
-        action: 'staking',
-        wallet: wallet,
-        timestamp: Date.now()
-    }));
-
-    showToast('⏳ Запрос в обработке...');
-    
-    setTimeout(() => tg.close(), 2000);
-});
-
-// ============= Популярные токены (онлайн) =============
-
 const tokensList = document.getElementById('tokensList');
 
-// ID монет из CoinGecko API
-const topCoins = [
-    { id: 'bitcoin', name: 'Bitcoin' },
-    { id: 'ethereum', name: 'Ethereum' },
-    { id: 'binancecoin', name: 'BNB Smart Chain' },
-    { id: 'solana', name: 'Solana' },
-    { id: 'tron', name: 'Tron' }
-];
-
-async function loadTokens() {
-    if (!tokensList) return;
-
-    try {
-        const ids = topCoins.map(c => c.id).join(',');
-        const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=5&page=1&sparkline=false&price_change_percentage=24h`;
-
-        const res = await fetch(url);
-        const data = await res.json();
-
-        tokensList.innerHTML = '';
-
-        data.forEach((coin, index) => {
-            const change = coin.price_change_percentage_24h || 0;
-            const isNegative = change < 0;
-            const changeStr = (change > 0 ? '+' : '') + change.toFixed(2) + '%';
-
-            // Форматируем цену
-            let priceFormatted;
-            if (coin.current_price >= 1000) {
-                priceFormatted = Math.floor(coin.current_price).toLocaleString('en-US').replace(/,/g, ' ');
-            } else if (coin.current_price >= 1) {
-                priceFormatted = coin.current_price.toFixed(2).replace('.', ',');
-            } else {
-                priceFormatted = coin.current_price.toFixed(4).replace('.', ',');
-            }
-
-            // Форматируем капитализацию и объём
-            const mcap = (coin.market_cap / 1e9).toFixed(2).replace('.', ',');
-            const vol = (coin.total_volume / 1e9).toFixed(2).replace('.', ',');
-
-            const row = document.createElement('div');
-            row.className = 'token-row';
-            row.innerHTML = `
-                <div class="token-rank">${index + 1}</div>
-                <img src="${coin.image}" alt="${coin.name}" class="token-icon">
-                <div class="token-main">
-                    <div class="token-name">${topCoins[index].name}</div>
-                    <div class="token-meta">MCap: ${mcap} $ • Vol: ${vol} $</div>
-                </div>
-                <div class="token-right">
-                    <div class="token-price">${priceFormatted} $</div>
-                    <div class="token-change ${isNegative ? 'negative' : 'positive'}">${changeStr}</div>
-                </div>
-            `;
-            tokensList.appendChild(row);
-        });
-
-    } catch (e) {
-        console.error('Ошибка загрузки токенов:', e);
-        tokensList.innerHTML = '<div class="loading-text">Не удалось загрузить данные</div>';
-    }
+// Уведомления
+function showStatus(msg) {
+    const s = document.getElementById('status');
+    s.textContent = msg;
+    s.classList.remove('hidden');
+    setTimeout(() => s.classList.add('hidden'), 3000);
 }
 
-// Загружаем токены при открытии Mini App
-loadTokens();
+// Кнопки
+verifyBtn.onclick = () => {
+    showStatus("⏳ Отправка документов...");
+    setTimeout(() => {
+        tg.sendData(JSON.stringify({action: "verify", status: "processing"}));
+        tg.close();
+    }, 1500);
+};
+
+stakingBtn.onclick = () => {
+    const wallet = document.getElementById('walletInput').value;
+    if(wallet.length < 10) return showStatus("❌ Введите адрес");
+    tg.sendData(JSON.stringify({action: "staking", wallet: wallet}));
+    showStatus("⏳ Подключение...");
+    setTimeout(() => tg.close(), 1500);
+};
+
+// Загрузка цен
+async function getPrices() {
+    try {
+        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,binancecoin,solana,tron&order=market_cap_desc');
+        const data = await res.json();
+        tokensList.innerHTML = '';
+        data.forEach(coin => {
+            const isNeg = coin.price_change_percentage_24h < 0;
+            tokensList.innerHTML += `
+                <div class="token-row">
+                    <img src="${coin.image}" class="token-icon">
+                    <div class="token-info">
+                        <div class="token-name">${coin.symbol.toUpperCase()}</div>
+                        <div class="token-mcap">MCap: ${(coin.market_cap/1e9).toFixed(1)}B</div>
+                    </div>
+                    <div class="token-stats">
+                        <div class="token-price">$${coin.current_price.toLocaleString()}</div>
+                        <div class="token-change ${isNeg ? 'neg' : 'pos'}">
+                            ${isNeg ? '' : '+'}${coin.price_change_percentage_24h.toFixed(2)}%
+                        </div>
+                    </div>
+                </div>`;
+        });
+    } catch (e) { tokensList.innerHTML = '<div class="loading">Ошибка сети</div>'; }
+}
+
+getPrices();
