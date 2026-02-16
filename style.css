@@ -155,3 +155,110 @@ h3 {
 }
 
 .hidden { display: none; }
+.tokens-card {
+    padding-top: 18px;
+}
+
+.tokens-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tokens-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--tw-border);
+    padding-bottom: 4px;
+}
+
+.token-tab {
+    background: none;
+    border: none;
+    padding: 6px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tw-hint);
+    position: relative;
+    cursor: default;
+}
+
+.token-tab.active {
+    color: var(--tw-blue);
+}
+
+.token-tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--tw-blue);
+}
+
+.tokens-list {
+    margin-top: 8px;
+}
+
+.token-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.token-left {
+    font-size: 13px;
+    color: var(--tw-hint);
+}
+
+.token-rank {
+    width: 18px;
+}
+
+.token-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.token-name-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.token-symbol {
+    font-size: 12px;
+    color: var(--tw-hint);
+}
+
+.token-price {
+    text-align: right;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.token-change {
+    text-align: right;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.token-change.negative {
+    color: #E53935;
+}
+
+.token-change.positive {
+    color: #43A047;
+}
+
+.token-meta {
+    font-size: 11px;
+    color: var(--tw-hint);
+    margin-top: 2px;
+}
