@@ -1,94 +1,65 @@
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f5f7;
-    margin: 0;
-    color: #000;
-}
-
-.screen { display: none; min-height: 100vh; background: #fff; }
+body { background: #fff; color: #000; font-family: -apple-system, sans-serif; margin: 0; overflow-x: hidden; }
+.screen { display: none; min-height: 100vh; }
 .screen.active { display: block; }
 
-/* Header */
-.header, .header-sub {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 20px;
-    background: #fff;
-}
-.header-sub h3 { flex-grow: 1; text-align: center; margin-right: 40px; font-size: 18px; }
+.top-bar { padding: 10px 20px; color: #8e8e93; font-size: 13px; }
+
+/* Баланс */
+.balance-container { padding: 0 20px 15px; }
+.main-balance { font-size: 44px; font-weight: 800; display: flex; align-items: center; gap: 12px; letter-spacing: -1px; }
+.balance-actions { display: flex; gap: 10px; margin-top: 8px; }
+.mini-icon { width: 22px; height: 22px; opacity: 0.5; cursor: pointer; }
+
+/* Вкладки */
+.main-tabs { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #f2f2f7; }
+.tabs-left { display: flex; gap: 20px; }
+.tab { padding: 12px 0; font-weight: 700; color: #8e8e93; position: relative; font-size: 15px; }
+.tab.active { color: #000; }
+.tab.active::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: #0000ff; border-radius: 2px; }
+.tabs-right { display: flex; gap: 15px; }
+
+/* Список токенов */
+.token-row { display: flex; align-items: center; padding: 12px 20px; gap: 12px; }
+.token-icon-wrapper { position: relative; width: 42px; height: 42px; }
+.main-logo { width: 42px; height: 42px; border-radius: 50%; background: #f2f2f7; }
+.badge-logo { position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; border: 2px solid #fff; border-radius: 50%; }
+
+.token-info { flex-grow: 1; }
+.token-name-row { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.network-badge { background: #e5e5ea; font-size: 11px; padding: 2px 7px; border-radius: 6px; color: #3a3a3c; font-weight: 500; }
+.token-price-row { font-size: 13px; color: #8e8e93; margin-top: 1px; }
+.percent-up { color: #34c759; font-weight: 600; }
+
+.token-balance { text-align: right; }
+.token-balance .amount { font-size: 17px; font-weight: 700; }
+.token-balance .usd-amount { font-size: 13px; color: #8e8e93; margin-top: 1px; }
+
+.manage-link { text-align: center; color: #0000ff; font-weight: 700; padding: 15px; cursor: pointer; font-size: 15px; }
+
+/* Карточка рынков */
+.markets-card { padding: 0 20px 30px; }
+.markets-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+.card-body { background: #f2f2f7; border-radius: 18px; padding: 15px; }
+.card-tabs { display: flex; gap: 25px; border-bottom: 1px solid #e5e5ea; margin-bottom: 10px; }
+.c-tab { padding: 8px 0; color: #8e8e93; font-weight: 700; font-size: 14px; }
+.c-tab.active { color: #000; border-bottom: 2px solid #0000ff; }
+.card-subtitle { font-size: 11px; color: #8e8e93; margin-bottom: 15px; }
+
+.market-item { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+.rank { color: #8e8e93; font-size: 11px; width: 10px; font-weight: 600; }
+.market-item img { width: 32px; height: 32px; border-radius: 50%; }
+.m-info { flex-grow: 1; }
+.m-name { font-weight: 700; font-size: 14px; }
+.m-stats { font-size: 10px; color: #8e8e93; }
+.m-price { text-align: right; font-size: 14px; font-weight: 700; }
+
+/* Форма */
+.header-sub { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid #f2f2f7; }
 .back-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
-
-/* Balance */
-.balance-section { text-align: center; padding: 30px 0; background: #fff; }
-.total-balance { font-size: 42px; font-weight: 700; }
-.currency { color: #8e8e93; margin-left: 5px; }
-
-/* Tabs */
-.tabs { display: flex; border-bottom: 1px solid #efeff4; background: #fff; }
-.tab { flex: 1; text-align: center; padding: 12px 0; color: #8e8e93; font-weight: 600; position: relative; }
-.tab.active { color: #0052ef; }
-.tab.active::after { content: ""; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background: #0052ef; border-radius: 3px; }
-
-/* Lists */
-.network-item, .token-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #f2f2f7;
-    cursor: pointer;
-}
-.network-item img, .token-item img { width: 35px; height: 35px; margin-right: 15px; border-radius: 50%; }
-.network-item span { font-size: 17px; font-weight: 500; }
-.arrow { margin-left: auto; color: #c7c7cc; font-size: 20px; }
-
-/* Form */
+.header-sub h3 { flex-grow: 1; text-align: center; margin-right: 30px; font-size: 17px; }
 .add-token-form { padding: 20px; }
-.token-logo-preview { text-align: center; margin-bottom: 20px; color: #8e8e93; }
-.token-logo-preview img { width: 50px; margin-bottom: 5px; }
 .input-group { margin-bottom: 15px; }
-.input-group label { display: block; font-size: 14px; color: #8e8e93; margin-bottom: 5px; margin-left: 5px; }
-.input-group input {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #e5e5ea;
-    border-radius: 12px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-.warning-box {
-    background: #fff9e6;
-    padding: 15px;
-    border-radius: 12px;
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-}
-.warning-icon { margin-right: 10px; }
-.warning-box p { margin: 0; font-size: 13px; color: #856404; line-height: 1.4; }
-
-.primary-btn {
-    width: 100%;
-    padding: 16px;
-    background: #0052ef;
-    color: #fff;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.manage-btn {
-    background: none;
-    border: none;
-    color: #0052ef;
-    font-weight: 600;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-.empty-state { text-align: center; padding: 40px 20px; color: #8e8e93; }
-.popular-section { padding: 20px; background: #fff; margin-top: 10px; }
-.popular-section h3 { font-size: 20px; margin-bottom: 15px; }
-
-.icon-gear { width: 24px; opacity: 0.5; cursor: pointer; }
+.input-group input { width: 100%; padding: 14px; border: 1px solid #e5e5ea; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
+.primary-btn { width: 100%; padding: 16px; background: #0052ef; color: #fff; border: none; border-radius: 25px; font-weight: 700; font-size: 16px; margin-top: 10px; }
+.token-logo-preview { text-align: center; margin-bottom: 20px; }
+.token-logo-preview img { width: 44px; }
