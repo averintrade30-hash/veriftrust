@@ -23,7 +23,7 @@ body {
 
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .logo { height: 32px; }
-.settings-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
+.settings-btn { background: none; border: none; font-size: 24px; cursor: pointer; padding: 5px; }
 
 .card { 
     background: var(--tw-card); border-radius: 16px; padding: 16px; 
@@ -31,6 +31,7 @@ body {
 }
 
 .card-title { margin: 0 0 16px 0; font-size: 18px; font-weight: 700; }
+.input-group { margin-bottom: 16px; }
 .label { display: block; font-size: 14px; color: var(--tw-hint); margin-bottom: 8px; font-weight: 500; }
 
 /* ЗАГРУЗКА ФОТО С ПРЕВЬЮ */
@@ -43,7 +44,8 @@ body {
     padding: 12px; display: flex; align-items: center; justify-content: center;
     min-height: 50px; gap: 10px; transition: 0.2s;
 }
-.preview-img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; border: 1px solid #fff; }
+.file-custom:hover { border-color: var(--tw-blue); }
+.preview-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 .file-custom span { font-size: 14px; font-weight: 600; color: var(--tw-blue); }
 .hidden { display: none !important; }
 
@@ -51,40 +53,81 @@ body {
     width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--tw-border);
     background: var(--tw-grey-bg); font-size: 15px; outline: none;
 }
+.text-input:focus { border-color: var(--tw-blue); }
 
 .btn {
     width: 100%; padding: 14px; border-radius: 12px; border: none;
     font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s;
 }
 .btn-primary { background: var(--tw-blue); color: #fff; }
+.btn-primary:active { opacity: 0.8; }
 .btn-outline { background: transparent; border: 1.5px solid var(--tw-blue); color: var(--tw-blue); }
+.btn-outline:active { background: rgba(5, 0, 255, 0.05); }
 
 /* ТОКЕНЫ */
-.tokens-tabs { display: flex; gap: 20px; margin-bottom: 15px; border-bottom: 1px solid var(--tw-border); }
-.tab { padding-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--tw-hint); cursor: pointer; }
-.tab.active { color: var(--tw-blue); border-bottom: 2px solid var(--tw-blue); }
+.tokens-tabs { display: flex; gap: 20px; margin-bottom: 15px; border-bottom: 1px solid var(--tw-border); padding-bottom: 2px; }
+.tab { padding-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--tw-hint); cursor: pointer; position: relative; }
+.tab.active { color: var(--tw-blue); }
+.tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--tw-blue); }
 
-.token-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; cursor: pointer; }
+.token-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; cursor: pointer; border-bottom: 1px solid var(--tw-border); }
+.token-item:last-child { border-bottom: none; }
 .token-info { display: flex; align-items: center; gap: 12px; }
 .token-icon { width: 36px; height: 36px; border-radius: 50%; }
 .token-name { font-weight: 700; font-size: 15px; }
-.token-price { font-weight: 700; font-size: 15px; text-align: right; }
-.pos { color: #2ebd85; font-size: 13px; }
-.neg { color: #f6465d; font-size: 13px; }
+.token-hint { font-size: 12px; color: var(--tw-hint); margin-top: 2px; }
+.token-price { text-align: right; }
+.token-price > div:first-child { font-weight: 700; font-size: 15px; }
+.pos { color: #2ebd85; font-size: 13px; font-weight: 600; }
+.neg { color: #f6465d; font-size: 13px; font-weight: 600; }
+
+/* ЭКРАНЫ */
+.screen-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.back-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--tw-text); padding: 0; line-height: 1; }
+.screen-header h2 { margin: 0; font-size: 20px; font-weight: 700; }
+
+.menu-card { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 16px; }
+.menu-card:active { background: var(--tw-grey-bg); }
+.menu-card span:first-child { font-size: 15px; font-weight: 600; }
+.arrow { font-size: 20px; color: var(--tw-hint); }
+
+.lang-card { padding: 8px; }
+.lang-option { display: flex; justify-content: space-between; align-items: center; padding: 14px 12px; cursor: pointer; border-radius: 8px; }
+.lang-option:hover { background: var(--tw-grey-bg); }
+.lang-option span { font-size: 15px; font-weight: 500; }
+.lang-option input[type="radio"] { width: 20px; height: 20px; cursor: pointer; }
 
 /* ЭКРАН МОНЕТЫ */
-.screen-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-.back-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
+.coin-main-card { padding: 20px 15px; }
+.coin-price-block { margin-bottom: 15px; }
 .coin-big-price { font-size: 32px; font-weight: 800; }
-.chart-container { height: 200px; margin-top: 20px; }
-.stats-grey-card { background: var(--tw-grey-bg); border-radius: 18px; padding: 5px 15px; }
-.stat-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #E2E4E8; }
+.coin-change { font-size: 16px; font-weight: 600; margin-top: 4px; }
+
+.chart-periods { display: flex; gap: 8px; margin-bottom: 20px; }
+.period-btn { 
+    background: var(--tw-grey-bg); border: none; padding: 6px 12px; border-radius: 8px; 
+    font-size: 13px; font-weight: 600; color: var(--tw-hint); cursor: pointer; transition: 0.2s;
+}
+.period-btn.active { background: var(--tw-blue); color: #fff; }
+
+.chart-container { width: 100%; height: 200px; position: relative; margin-bottom: 10px; }
+
+.section-title { font-size: 18px; font-weight: 700; margin: 20px 0 10px 5px; }
+
+.stats-grey-card { background: var(--tw-grey-bg); border-radius: 18px; padding: 5px 15px; box-shadow: none; }
+.stat-row { 
+    display: flex; justify-content: space-between; padding: 14px 0; 
+    border-bottom: 1px solid #E2E4E8; font-size: 14px; 
+}
 .stat-row:last-child { border-bottom: none; }
-.stat-row span:first-child { color: var(--tw-hint); font-size: 14px; }
-.stat-row span:last-child { font-weight: 600; font-size: 14px; }
+.stat-row span:first-child { color: var(--tw-hint); font-weight: 500; }
+.stat-row span:last-child { color: var(--tw-text); font-weight: 600; text-align: right; }
 
 .status-toast {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,0.8); color: #fff; padding: 12px 24px;
-    border-radius: 50px; font-size: 14px; z-index: 1000;
+    background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px;
+    border-radius: 50px; font-size: 14px; z-index: 1000; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
+
+.loading { text-align: center; padding: 20px; color: var(--tw-hint); font-size: 14px; }
