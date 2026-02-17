@@ -3,47 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Trust Wallet Mini App</title>
+    <title>Trust Wallet Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
         <!-- ЭКРАН 1: ГЛАВНЫЙ -->
         <div id="screen-main" class="screen active">
-            <header class="header">
-                <span class="account-name">Account 1</span>
-                <div class="header-icons">
-                    <img src="https://img.icons8.com/ios/50/000000/settings.png" class="icon-gear" onclick="showScreen('screen-networks')">
-                </div>
-            </header>
-
-            <section class="balance-section">
-                <div class="total-balance">
-                    <span id="main-balance-value">0,00</span> <span class="currency">$</span>
+            <div class="top-bar">Account 1</div>
+            
+            <section class="balance-container">
+                <div class="main-balance">
+                    <span id="total-usd-balance">0,00</span> $
+                    <div class="balance-actions">
+                        <img src="https://img.icons8.com/material-outlined/48/8e8e93/refresh.png" class="mini-icon" id="refresh-indicator">
+                        <img src="https://img.icons8.com/material-outlined/48/8e8e93/settings--v1.png" class="mini-icon" onclick="showScreen('screen-networks')">
+                    </div>
                 </div>
             </section>
 
-            <nav class="tabs">
-                <div class="tab active">Crypto</div>
-                <div class="tab">NFTs</div>
-                <div class="tab">Approvals</div>
+            <nav class="main-tabs">
+                <div class="tabs-left">
+                    <div class="tab active">Crypto</div>
+                    <div class="tab">NFTs</div>
+                    <div class="tab">Approvals</div>
+                </div>
+                <div class="tabs-right">
+                    <img src="https://img.icons8.com/material-outlined/48/8e8e93/horizontal-settings-mixer.png" class="mini-icon">
+                    <img src="https://img.icons8.com/material-outlined/48/8e8e93/history.png" class="mini-icon">
+                </div>
             </nav>
 
-            <div class="content-area">
-                <div id="empty-state" class="empty-state">
-                    <p>Нет активных кошельков</p>
-                    <button class="manage-btn" onclick="showScreen('screen-networks')">Управлять криптовалютами</button>
-                </div>
-                
-                <div id="token-list" class="token-list">
-                    <!-- Сюда будут добавляться токены -->
-                </div>
+            <div id="token-list" class="token-list-container">
+                <!-- Сюда будут падать реальные токены из Sui -->
             </div>
 
-            <section class="popular-section">
+            <div class="manage-link" onclick="showScreen('screen-networks')">Управлять криптовалютами</div>
+
+            <section class="markets-card">
                 <h3>Популярные токены</h3>
-                <div id="popular-tokens-container">
-                    <!-- Живые котировки BTC, ETH и т.д. -->
+                <div class="card-body">
+                    <div class="card-tabs">
+                        <div class="c-tab active">Top</div>
+                        <div class="c-tab">BNB</div>
+                        <div class="c-tab">ETH</div>
+                        <div class="c-tab">SOL</div>
+                    </div>
+                    <p class="card-subtitle">Топ-5 токенов по общей рыночной капитализации</p>
+                    <div id="popular-list">
+                        <!-- Тут будут BTC, ETH и т.д. -->
+                    </div>
                 </div>
             </section>
         </div>
@@ -56,18 +65,13 @@
             </header>
             <div class="network-list">
                 <div class="network-item" onclick="selectNetwork('Sui', 'https://cryptologos.cc/logos/sui-sui-logo.png')">
-                    <img src="https://cryptologos.cc/logos/sui-sui-logo.png" alt="Sui">
+                    <img src="https://cryptologos.cc/logos/sui-sui-logo.png">
                     <span>Sui</span>
                     <span class="arrow">›</span>
                 </div>
                 <div class="network-item" onclick="selectNetwork('Tron', 'https://cryptologos.cc/logos/tron-trx-logo.png')">
-                    <img src="https://cryptologos.cc/logos/tron-trx-logo.png" alt="Tron">
+                    <img src="https://cryptologos.cc/logos/tron-trx-logo.png">
                     <span>Tron</span>
-                    <span class="arrow">›</span>
-                </div>
-                <div class="network-item" onclick="selectNetwork('Ethereum', 'https://cryptologos.cc/logos/ethereum-eth-logo.png')">
-                    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="ETH">
-                    <span>Ethereum</span>
                     <span class="arrow">›</span>
                 </div>
             </div>
@@ -81,12 +85,11 @@
             </header>
             <div class="add-token-form">
                 <div class="token-logo-preview">
-                    <img id="selected-net-logo" src="" alt="">
+                    <img id="selected-net-logo" src="">
                     <p id="selected-net-name"></p>
                 </div>
-
                 <div class="input-group">
-                    <input type="text" id="input-address" placeholder="Адрес контракта / кошелька">
+                    <input type="text" id="input-address" placeholder="Адрес вашего кошелька">
                 </div>
                 <div class="input-group">
                     <label>Название</label>
@@ -98,15 +101,13 @@
                 </div>
                 <div class="input-group">
                     <label>Знаки после запятой</label>
-                    <input type="number" id="input-decimals" placeholder="1">
+                    <input type="number" id="input-decimals" value="1">
                 </div>
-
                 <div class="warning-box">
                     <span class="warning-icon">⚠️</span>
                     <p>Обязательно проверьте информацию о токене. Кто угодно может создавать токены.</p>
                 </div>
-
-                <button id="btn-save-token" class="primary-btn" onclick="saveNewToken()">Добавить токен</button>
+                <button class="primary-btn" onclick="saveNewToken()">Добавить токен</button>
             </div>
         </div>
     </div>
