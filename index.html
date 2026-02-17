@@ -21,7 +21,7 @@
                 <h3 class="card-title" data-i18n="verify_title">Верификация личности</h3>
                 <div class="input-group">
                     <label class="label" data-i18n="doc_label">Документ (ID / Паспорт)</label>
-                    <div class="file-upload-wrapper" id="wrapperDoc">
+                    <div class="file-upload-wrapper">
                         <input type="file" id="docInput" accept="image/*">
                         <div class="file-custom">
                             <img id="previewDoc" class="preview-img hidden">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="input-group">
                     <label class="label" data-i18n="selfie_label">Селфи с документом</label>
-                    <div class="file-upload-wrapper" id="wrapperSelfie">
+                    <div class="file-upload-wrapper">
                         <input type="file" id="selfieInput" accept="image/*">
                         <div class="file-custom">
                             <img id="previewSelfie" class="preview-img hidden">
@@ -82,6 +82,22 @@
             </div>
         </div>
 
+        <!-- Экран помощи -->
+        <div id="helpScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromHelp">←</button>
+                <h2 data-i18n="help_support">Помощь и поддержка</h2>
+            </div>
+            <div class="card menu-card" id="supportCenterBtn">
+                <span data-i18n="support_center">Центр поддержки</span>
+                <span class="arrow">›</span>
+            </div>
+            <div class="card menu-card" id="supportServiceBtn">
+                <span data-i18n="support_service">Служба поддержки</span>
+                <span class="arrow">›</span>
+            </div>
+        </div>
+
         <!-- Экран выбора языка -->
         <div id="langScreen" class="screen">
             <div class="screen-header">
@@ -108,9 +124,9 @@
                     <div id="coinChange" class="coin-change">0.00%</div>
                 </div>
                 <div class="chart-periods">
-                    <button class="period-btn active">1Д</button>
-                    <button class="period-btn">1Н</button>
-                    <button class="period-btn">1М</button>
+                    <button class="period-btn active" data-period="1d">1Д</button>
+                    <button class="period-btn" data-period="7d">1Н</button>
+                    <button class="period-btn" data-period="30d">1М</button>
                 </div>
                 <div class="chart-container">
                     <canvas id="coinChartCanvas"></canvas>
