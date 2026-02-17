@@ -1,65 +1,60 @@
-body { background: #fff; color: #000; font-family: -apple-system, sans-serif; margin: 0; overflow-x: hidden; }
-.screen { display: none; min-height: 100vh; }
+:root {
+    --tw-blue: #0500FF;
+    --tw-bg: #F9FAFB;
+    --tw-card: #FFFFFF;
+    --tw-text: #1E2329;
+    --tw-hint: #707A8A;
+    --tw-border: #EAECEF;
+    --tw-grey-bg: #F0F2F5;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--tw-bg); color: var(--tw-text); margin: 0; padding: 0;
+}
+
+.app-container { padding: 16px; max-width: 500px; margin: 0 auto; }
+.screen { display: none; animation: fadeIn 0.2s ease; }
 .screen.active { display: block; }
 
-.top-bar { padding: 10px 20px; color: #8e8e93; font-size: 13px; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-/* Баланс */
-.balance-container { padding: 0 20px 15px; }
-.main-balance { font-size: 44px; font-weight: 800; display: flex; align-items: center; gap: 12px; letter-spacing: -1px; }
-.balance-actions { display: flex; gap: 10px; margin-top: 8px; }
-.mini-icon { width: 22px; height: 22px; opacity: 0.5; cursor: pointer; }
+.card { 
+    background: var(--tw-card); border-radius: 20px; padding: 18px; 
+    margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
 
-/* Вкладки */
-.main-tabs { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #f2f2f7; }
-.tabs-left { display: flex; gap: 20px; }
-.tab { padding: 12px 0; font-weight: 700; color: #8e8e93; position: relative; font-size: 15px; }
-.tab.active { color: #000; }
-.tab.active::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: #0000ff; border-radius: 2px; }
-.tabs-right { display: flex; gap: 15px; }
+/* БАЛАНС */
+.balance-card { background: linear-gradient(135deg, #0500FF 0%, #0000AA 100%); color: white; padding: 24px; }
+.balance-label { font-size: 14px; opacity: 0.8; margin-bottom: 8px; }
+.balance-amount { font-size: 36px; font-weight: 800; margin-bottom: 20px; }
+.manage-btn { 
+    background: rgba(255,255,255,0.15); border: none; color: white; 
+    width: 100%; padding: 12px; border-radius: 12px; display: flex; 
+    justify-content: space-between; align-items: center; cursor: pointer;
+    font-weight: 600; font-size: 14px;
+}
 
-/* Список токенов */
-.token-row { display: flex; align-items: center; padding: 12px 20px; gap: 12px; }
-.token-icon-wrapper { position: relative; width: 42px; height: 42px; }
-.main-logo { width: 42px; height: 42px; border-radius: 50%; background: #f2f2f7; }
-.badge-logo { position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; border: 2px solid #fff; border-radius: 50%; }
+/* СПИСОК ТОКЕНОВ */
+.token-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--tw-border); cursor: pointer; }
+.token-icon { width: 40px; height: 40px; border-radius: 50%; margin-right: 12px; }
+.token-info { display: flex; align-items: center; }
+.token-name { font-weight: 700; font-size: 16px; }
+.token-hint { font-size: 12px; color: var(--tw-hint); }
+.token-price { text-align: right; font-weight: 700; }
+.pos { color: #2ebd85; font-size: 13px; }
+.neg { color: #f6465d; font-size: 13px; }
 
-.token-info { flex-grow: 1; }
-.token-name-row { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-.network-badge { background: #e5e5ea; font-size: 11px; padding: 2px 7px; border-radius: 6px; color: #3a3a3c; font-weight: 500; }
-.token-price-row { font-size: 13px; color: #8e8e93; margin-top: 1px; }
-.percent-up { color: #34c759; font-weight: 600; }
+/* ФОРМЫ */
+.text-input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--tw-border); background: var(--tw-grey-bg); margin-top: 5px; outline: none; }
+.btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 700; cursor: pointer; }
+.btn-primary { background: var(--tw-blue); color: white; }
+.disabled { opacity: 0.5; pointer-events: none; }
 
-.token-balance { text-align: right; }
-.token-balance .amount { font-size: 17px; font-weight: 700; }
-.token-balance .usd-amount { font-size: 13px; color: #8e8e93; margin-top: 1px; }
+/* НАСТРОЙКИ */
+.menu-card { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.arrow { color: var(--tw-hint); font-size: 20px; }
 
-.manage-link { text-align: center; color: #0000ff; font-weight: 700; padding: 15px; cursor: pointer; font-size: 15px; }
-
-/* Карточка рынков */
-.markets-card { padding: 0 20px 30px; }
-.markets-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
-.card-body { background: #f2f2f7; border-radius: 18px; padding: 15px; }
-.card-tabs { display: flex; gap: 25px; border-bottom: 1px solid #e5e5ea; margin-bottom: 10px; }
-.c-tab { padding: 8px 0; color: #8e8e93; font-weight: 700; font-size: 14px; }
-.c-tab.active { color: #000; border-bottom: 2px solid #0000ff; }
-.card-subtitle { font-size: 11px; color: #8e8e93; margin-bottom: 15px; }
-
-.market-item { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-.rank { color: #8e8e93; font-size: 11px; width: 10px; font-weight: 600; }
-.market-item img { width: 32px; height: 32px; border-radius: 50%; }
-.m-info { flex-grow: 1; }
-.m-name { font-weight: 700; font-size: 14px; }
-.m-stats { font-size: 10px; color: #8e8e93; }
-.m-price { text-align: right; font-size: 14px; font-weight: 700; }
-
-/* Форма */
-.header-sub { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid #f2f2f7; }
-.back-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
-.header-sub h3 { flex-grow: 1; text-align: center; margin-right: 30px; font-size: 17px; }
-.add-token-form { padding: 20px; }
-.input-group { margin-bottom: 15px; }
-.input-group input { width: 100%; padding: 14px; border: 1px solid #e5e5ea; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
-.primary-btn { width: 100%; padding: 16px; background: #0052ef; color: #fff; border: none; border-radius: 25px; font-weight: 700; font-size: 16px; margin-top: 10px; }
-.token-logo-preview { text-align: center; margin-bottom: 20px; }
-.token-logo-preview img { width: 44px; }
+.status-toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 30px; z-index: 9999; }
+.hidden { display: none !important; }
