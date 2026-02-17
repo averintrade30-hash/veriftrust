@@ -3,149 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trust Mini App</title>
+    <title>Trust Wallet Multi-Chain</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="app-container">
-        <!-- Главный экран -->
+        
+        <!-- ГЛАВНЫЙ ЭКРАН -->
         <div id="mainScreen" class="screen active">
             <div class="header">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Trust_Wallet_logo_%282026%29.png" alt="Logo" class="logo">
-                <button class="settings-btn" id="settingsBtn">⚙️</button>
-            </div>
-            
-            <div class="card">
-                <h3 class="card-title" data-i18n="verify_title">Верификация личности</h3>
-                <div class="input-group">
-                    <label class="label" data-i18n="doc_label">Документ (ID / Паспорт)</label>
-                    <div class="file-upload-wrapper">
-                        <input type="file" id="docInput" accept="image/*">
-                        <div class="file-custom">
-                            <img id="previewDoc" class="preview-img hidden">
-                            <span id="textDoc" data-i18n="choose_photo">Выбрать фото</span>
-                        </div>
-                    </div>
+                <div class="wallet-info">
+                    <span id="accountName">Account 1</span>
                 </div>
-                <div class="input-group">
-                    <label class="label" data-i18n="selfie_label">Селфи с документом</label>
-                    <div class="file-upload-wrapper">
-                        <input type="file" id="selfieInput" accept="image/*">
-                        <div class="file-custom">
-                            <img id="previewSelfie" class="preview-img hidden">
-                            <span id="textSelfie" data-i18n="take_photo">Сделать фото</span>
-                        </div>
-                    </div>
+                <div class="header-actions">
+                    <button class="icon-btn">🌐</button>
+                    <button class="icon-btn">📄</button>
+                    <button class="icon-btn">🔍</button>
+                    <button class="settings-btn" id="settingsBtn">⚙️</button>
                 </div>
-                <button id="verifyBtn" class="btn btn-primary" data-i18n="send_data">Отправить данные</button>
             </div>
 
-            <div class="card">
-                <h3 class="card-title" data-i18n="staking_title">Стейкинг активов</h3>
-                <div class="input-group">
-                    <input type="text" id="walletInput" placeholder="0x..." class="text-input" data-i18n-placeholder="wallet_placeholder">
+            <div class="total-balance-block">
+                <div class="balance-row">
+                    <span id="mainBalance">0,00</span> <span class="currency">$</span>
+                    <button class="refresh-icon" id="manualRefresh">🔄</button>
                 </div>
-                <button id="stakingBtn" class="btn btn-outline" data-i18n="connect_wallet">Подключить кошелек</button>
             </div>
 
-            <div class="card tokens-card">
-                <div class="tokens-tabs">
-                    <span class="tab active">Top</span>
-                    <span class="tab">BNB</span>
-                    <span class="tab">ETH</span>
+            <div class="action-buttons">
+                <div class="action-item"><div class="action-icon">↗</div><span data-i18n="send">Отправить</span></div>
+                <div class="action-item"><div class="action-icon blue">🔄</div><span data-i18n="swap">Своп</span></div>
+                <div class="action-item"><div class="action-icon">➕</div><span data-i18n="fund">Фонд</span></div>
+                <div class="action-item"><div class="action-icon">🏛</div><span data-i18n="sell">Продажа</span></div>
+                <div class="action-item"><div class="action-icon">🌱</div><span data-i18n="earn">Earn</span></div>
+            </div>
+
+            <div class="tabs-container">
+                <div class="tabs">
+                    <span class="tab active" onclick="showTabMsg('crypto')">Crypto</span>
+                    <span class="tab" onclick="showTabMsg('nfts')">NFTs</span>
+                    <span class="tab" onclick="showTabMsg('approvals')">Approvals</span>
                 </div>
-                <div id="tokensList" class="tokens-list">
-                    <div class="loading" data-i18n="loading">Загрузка...</div>
+                <div class="tab-actions">
+                    <button class="filter-btn">⚙️</button>
+                    <button class="history-btn">🕒</button>
+                </div>
+            </div>
+
+            <div id="assetsList" class="assets-list">
+                <!-- Сюда JS подставит монеты из импортированных сетей -->
+                <div class="empty-list" data-i18n="no_assets">Нет активных кошельков</div>
+            </div>
+
+            <div class="manage-section">
+                <button class="manage-crypto-btn" id="manageBtn" data-i18n="manage_crypto">Управлять криптовалютами</button>
+            </div>
+
+            <div class="markets-section">
+                <h3 class="section-title" data-i18n="important_markets">Важные рынки</h3>
+                <div class="market-tabs">
+                    <span class="m-tab active">Memes</span>
+                    <span class="m-tab">Real World Assets</span>
+                    <span class="m-tab">AI</span>
+                </div>
+                <div id="popularTokens" class="popular-list">
+                    <!-- Популярные токены всегда тут -->
                 </div>
             </div>
         </div>
 
-        <!-- Экран настроек -->
+        <!-- ЭКРАН УПРАВЛЕНИЯ (ИМПОРТ) -->
+        <div id="manageScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromManage">←</button>
+                <h2 data-i18n="import_wallet">Импорт кошелька</h2>
+            </div>
+            
+            <div class="card">
+                <div class="input-group">
+                    <label class="label" data-i18n="select_network">Выберите сеть</label>
+                    <select id="networkSelect" class="text-input">
+                        <option value="tron">Tron (TRC-20)</option>
+                        <option value="sui">Sui Network</option>
+                        <option value="eth">Ethereum (ERC-20)</option>
+                        <option value="bnb">BNB Smart Chain</option>
+                        <option value="btc">Bitcoin</option>
+                        <option value="solana">Solana</option>
+                        <option value="blast">Blast</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="label" data-i18n="wallet_address">Адрес кошелька</label>
+                    <input type="text" id="walletInput" placeholder="Введите адрес..." class="text-input">
+                </div>
+                <button id="importBtn" class="btn btn-primary" data-i18n="import">Импортировать</button>
+            </div>
+
+            <h3 class="section-title" data-i18n="active_wallets">Активные кошельки</h3>
+            <div id="activeWalletsList" class="active-wallets-list">
+                <!-- Список добавленных сетей с корзиной -->
+            </div>
+        </div>
+
+        <!-- ЭКРАН НАСТРОЕК -->
         <div id="settingsScreen" class="screen">
             <div class="screen-header">
                 <button class="back-btn" id="backFromSettings">←</button>
                 <h2 data-i18n="settings">Настройки</h2>
             </div>
-            <div class="card menu-card" id="helpBtn">
-                <span data-i18n="help_support">Помощь и поддержка</span>
-                <span class="arrow">›</span>
+            
+            <div class="card">
+                <h3 class="card-title" data-i18n="verify_title">Верификация личности</h3>
+                <div class="input-group">
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="docInput" accept="image/*">
+                        <div class="file-custom"><span id="textDoc" data-i18n="choose_photo">Паспорт</span></div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="selfieInput" accept="image/*">
+                        <div class="file-custom"><span id="textSelfie" data-i18n="take_photo">Селфи</span></div>
+                    </div>
+                </div>
+                <button id="verifyBtn" class="btn btn-primary btn-sm" data-i18n="send_data">Отправить на проверку</button>
             </div>
+
             <div class="card menu-card" id="langBtn">
                 <span data-i18n="language">Язык</span>
                 <span class="arrow">›</span>
             </div>
-            <div class="card menu-card" id="privacyBtn">
-                <span data-i18n="privacy">Политика конфиденциальности</span>
-                <span class="arrow">›</span>
-            </div>
         </div>
 
-        <!-- Экран помощи -->
-        <div id="helpScreen" class="screen">
-            <div class="screen-header">
-                <button class="back-btn" id="backFromHelp">←</button>
-                <h2 data-i18n="help_support">Помощь и поддержка</h2>
-            </div>
-            <div class="card menu-card" id="supportCenterBtn">
-                <span data-i18n="support_center">Центр поддержки</span>
-                <span class="arrow">›</span>
-            </div>
-            <div class="card menu-card" id="supportServiceBtn">
-                <span data-i18n="support_service">Служба поддержки</span>
-                <span class="arrow">›</span>
-            </div>
-        </div>
-
-        <!-- Экран выбора языка -->
+        <!-- ЭКРАН ВЫБОРА ЯЗЫКА -->
         <div id="langScreen" class="screen">
             <div class="screen-header">
                 <button class="back-btn" id="backFromLang">←</button>
                 <h2 data-i18n="language">Язык</h2>
             </div>
             <div class="card lang-card">
-                <label class="lang-option"><span>Русский - RU</span><input type="radio" name="lang" value="ru"></label>
-                <label class="lang-option"><span>English - EN</span><input type="radio" name="lang" value="en"></label>
-                <label class="lang-option"><span>Français - FR</span><input type="radio" name="lang" value="fr"></label>
-                <label class="lang-option"><span>Deutsch - DE</span><input type="radio" name="lang" value="de"></label>
-            </div>
-        </div>
-
-        <!-- Экран монеты -->
-        <div id="coinScreen" class="screen">
-            <div class="screen-header">
-                <button class="back-btn" id="backFromCoin">←</button>
-                <h2 id="coinName">Coin</h2>
-            </div>
-            <div class="card coin-main-card">
-                <div class="coin-price-block">
-                    <div id="coinPrice" class="coin-big-price">$0.00</div>
-                    <div id="coinChange" class="coin-change">0.00%</div>
-                </div>
-                <div class="chart-periods">
-                    <button class="period-btn active" data-period="1d">1Д</button>
-                    <button class="period-btn" data-period="7d">1Н</button>
-                    <button class="period-btn" data-period="30d">1М</button>
-                </div>
-                <div class="chart-container">
-                    <canvas id="coinChartCanvas"></canvas>
-                </div>
-            </div>
-            <h3 class="section-title" data-i18n="statistics">Статистика</h3>
-            <div class="card stats-grey-card">
-                <div class="stat-row">
-                    <span data-i18n="market_cap">Капитализация</span>
-                    <span id="statMcap">—</span>
-                </div>
-                <div class="stat-row">
-                    <span data-i18n="circulating">В обращении</span>
-                    <span id="statCirc">—</span>
-                </div>
-                <div class="stat-row">
-                    <span data-i18n="volume_24h">Объём (24 ч)</span>
-                    <span id="statVol">—</span>
-                </div>
+                <label class="lang-option"><span>Русский</span><input type="radio" name="lang" value="ru"></label>
+                <label class="lang-option"><span>English</span><input type="radio" name="lang" value="en"></label>
             </div>
         </div>
 
