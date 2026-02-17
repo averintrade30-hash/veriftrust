@@ -1,81 +1,94 @@
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-body { background-color: #f9f9f9; color: #000; overflow-x: hidden; }
-.screen { display: none; min-height: 100vh; padding-bottom: 30px; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f5f7;
+    margin: 0;
+    color: #000;
+}
+
+.screen { display: none; min-height: 100vh; background: #fff; }
 .screen.active { display: block; }
 
 /* Header */
-.header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #fff; }
-.wallet-info { font-weight: 700; font-size: 18px; }
-.header-actions { display: flex; gap: 15px; }
-.icon-btn, .settings-btn { background: none; border: none; font-size: 20px; cursor: pointer; }
+.header, .header-sub {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: #fff;
+}
+.header-sub h3 { flex-grow: 1; text-align: center; margin-right: 40px; font-size: 18px; }
+.back-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
 
 /* Balance */
-.total-balance-block { text-align: center; padding: 30px 0; background: #fff; }
-.balance-row { font-size: 48px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 8px; }
-.currency { color: #8a8a8e; font-size: 32px; }
-.refresh-icon { background: none; border: none; font-size: 20px; opacity: 0.3; }
-
-/* Actions */
-.action-buttons { display: flex; justify-content: space-around; padding: 10px 15px 25px; background: #fff; }
-.action-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
-.action-icon { width: 50px; height: 50px; background: #f2f2f7; color: #0500ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-.action-icon.blue { background: #0500ff; color: #fff; }
+.balance-section { text-align: center; padding: 30px 0; background: #fff; }
+.total-balance { font-size: 42px; font-weight: 700; }
+.currency { color: #8e8e93; margin-left: 5px; }
 
 /* Tabs */
-.tabs-container { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #f2f2f7; background: #fff; position: sticky; top: 0; z-index: 10; }
-.tabs { display: flex; gap: 20px; }
-.tab { font-weight: 600; color: #8a8a8e; padding-bottom: 5px; cursor: pointer; }
-.tab.active { color: #0500ff; border-bottom: 2px solid #0500ff; }
-.tab-actions { display: flex; gap: 15px; color: #8a8a8e; }
+.tabs { display: flex; border-bottom: 1px solid #efeff4; background: #fff; }
+.tab { flex: 1; text-align: center; padding: 12px 0; color: #8e8e93; font-weight: 600; position: relative; }
+.tab.active { color: #0052ef; }
+.tab.active::after { content: ""; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background: #0052ef; border-radius: 3px; }
 
-/* Assets */
-.assets-list { background: #fff; min-height: 100px; }
-.asset-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #f2f2f7; }
-.asset-left { display: flex; align-items: center; gap: 15px; }
-.icon-container { position: relative; }
-.asset-icon { width: 42px; height: 42px; border-radius: 50%; }
-.network-badge-icon { position: absolute; bottom: -2px; right: -2px; width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; }
-.asset-name { font-weight: 700; font-size: 16px; }
-.net-label { font-size: 10px; color: #8a8a8e; text-transform: uppercase; background: #f2f2f7; padding: 1px 4px; border-radius: 4px; }
-.asset-price { font-size: 13px; color: #8a8a8e; margin-top: 2px; }
-.asset-right { text-align: right; }
-.asset-amount { font-weight: 700; font-size: 16px; }
-.asset-usd { font-size: 13px; color: #8a8a8e; }
-.up { color: #34c759; } .down { color: #ff3b30; }
-.empty-list { text-align: center; padding: 40px; color: #8a8a8e; font-style: italic; }
+/* Lists */
+.network-item, .token-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #f2f2f7;
+    cursor: pointer;
+}
+.network-item img, .token-item img { width: 35px; height: 35px; margin-right: 15px; border-radius: 50%; }
+.network-item span { font-size: 17px; font-weight: 500; }
+.arrow { margin-left: auto; color: #c7c7cc; font-size: 20px; }
 
-/* Manage Section */
-.manage-section { padding: 20px; text-align: center; background: #fff; }
-.manage-crypto-btn { background: none; border: none; color: #0500ff; font-weight: 700; font-size: 16px; cursor: pointer; }
-
-/* Markets */
-.markets-section { padding: 20px; }
-.section-title { font-size: 20px; font-weight: 800; margin-bottom: 15px; }
-.market-tabs { display: flex; gap: 15px; margin-bottom: 15px; overflow-x: auto; }
-.m-tab { padding: 6px 14px; background: #f2f2f7; border-radius: 15px; font-size: 13px; font-weight: 600; color: #8a8a8e; white-space: nowrap; }
-.m-tab.active { background: #0500ff; color: #fff; }
-
-/* Manage Screen */
-.screen-header { display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: #fff; border-bottom: 1px solid #f2f2f7; }
-.back-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
-.card { background: #fff; margin: 15px; padding: 20px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+/* Form */
+.add-token-form { padding: 20px; }
+.token-logo-preview { text-align: center; margin-bottom: 20px; color: #8e8e93; }
+.token-logo-preview img { width: 50px; margin-bottom: 5px; }
 .input-group { margin-bottom: 15px; }
-.label { display: block; font-size: 13px; font-weight: 600; color: #8a8a8e; margin-bottom: 8px; }
-.text-input { width: 100%; padding: 12px; border: 1px solid #f2f2f7; border-radius: 10px; font-size: 15px; background: #f9f9f9; }
-.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; }
-.btn-primary { background: #0500ff; color: #fff; }
-.active-wallet-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #fff; border-bottom: 1px solid #f2f2f7; }
-.wallet-info-row { display: flex; align-items: center; gap: 10px; font-weight: 600; }
-.mini-icon { width: 24px; height: 24px; border-radius: 50%; }
-.delete-btn { background: none; border: none; font-size: 18px; cursor: pointer; opacity: 0.5; }
+.input-group label { display: block; font-size: 14px; color: #8e8e93; margin-bottom: 5px; margin-left: 5px; }
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #e5e5ea;
+    border-radius: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.warning-box {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+.warning-icon { margin-right: 10px; }
+.warning-box p { margin: 0; font-size: 13px; color: #856404; line-height: 1.4; }
 
-/* Settings */
-.menu-card { display: flex; justify-content: space-between; align-items: center; font-weight: 600; cursor: pointer; }
-.arrow { color: #c7c7cc; font-size: 20px; }
-.file-upload-wrapper { position: relative; margin-bottom: 10px; }
-.file-upload-wrapper input { opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer; }
-.file-custom { padding: 12px; border: 2px dashed #f2f2f7; border-radius: 10px; text-align: center; color: #8a8a8e; font-weight: 600; }
+.primary-btn {
+    width: 100%;
+    padding: 16px;
+    background: #0052ef;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+}
 
-/* Toast */
-.status-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 1000; }
-.hidden { display: none; }
+.manage-btn {
+    background: none;
+    border: none;
+    color: #0052ef;
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.empty-state { text-align: center; padding: 40px 20px; color: #8e8e93; }
+.popular-section { padding: 20px; background: #fff; margin-top: 10px; }
+.popular-section h3 { font-size: 20px; margin-bottom: 15px; }
+
+.icon-gear { width: 24px; opacity: 0.5; cursor: pointer; }
