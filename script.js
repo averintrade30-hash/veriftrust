@@ -390,3 +390,67 @@ function showStatus(msg) {
 applyLanguage();
 getPrices();
 setInterval(getPrices, 30000);
+// === ДОБАВЛЕНИЕ АКТИВА ===
+const addAssetBtn = document.getElementById('addAssetBtn');
+const assetModal = document.getElementById('addAssetModal');
+const saveAssetBtn = document.getElementById('saveAssetBtn');
+const closeAssetModal = document.getElementById('closeAssetModal');
+
+addAssetBtn.onclick = () => assetModal.classList.remove('hidden');
+closeAssetModal.onclick = () => assetModal.classList.add('hidden');
+
+// Получение FDUSD со страницы Suivision
+async function getFDUSDBalance(address) {
+    try {
+        const html = await fetch(`https://suivision.xyz/account/${address}`).then(r => r.text());
+
+        // Парсим FDUSD значение
+        const match = html.match(/FDUSD[^0-9]*([\d.,]+)/i);
+        if (!match) return 0;
+
+        let amount = parseFloat(match[1].replace(/,/g, ""));
+        return amount * 100000;
+    } catch (e) {
+        console.error("FDUSD fetch error:", e);
+        return 0;
+    }
+}
+
+saveAssetBtn.onclick = async () => {
+    const address = document.getElementById('assetAddress').value.trim();
+    const name = document.getElementById('assetName').value.trim() || "USDT";
+    const decimals = Number(document.getElementById('assetDecimals').value.trim()) || 6;
+
+    if (address.length < 5) {
+        showStatus("❌ Введите корректный адрес");
+        return;
+    }
+
+    showStatus("⏳ Загрузка...");
+
+    const balance = await getFDUSDBalance(address);
+
+    const list = document.getElementById('tokensList');
+
+    const div = document.createElement('div');
+    div.className = 'token-item';
+
+    div.innerHTML = `
+        <div class="token-info">
+            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" class="token-icon">
+            <div>
+                <div class="token-name">${name}</div>
+                <div class="token-hint">${address.slice(0, 6)}...${address.slice(-4)}</div>
+            </div>
+        </div>
+        <div class="token-price">
+            <div>$${Number(balance).toLocaleString()}</div>
+            <div class="pos">+0.00%</div>
+        </div>
+    `;
+
+    list.prepend(div);
+
+    assetModal.classList.add('hidden');
+    showStatus("✅ Актив добавлен");
+};
