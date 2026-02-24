@@ -109,7 +109,7 @@
                 <h2 id="detailAssetName">Asset</h2>
             </div>
             <div class="asset-hero">
-                <div id="detailAssetBalance" class="big-balance">\$0.00</div>
+                <div id="detailAssetBalance" class="big-balance">$0.00</div>
                 <div id="detailAssetAddress" class="asset-address-badge">0x...</div>
             </div>
             <div style="padding: 0 16px;">
@@ -124,4 +124,66 @@
                 <button class="back-btn" id="backFromHelp">←</button>
                 <h2>Помощь и поддержка</h2>
             </div>
-            <div class="card menu-card" id="supportCenterBtn"><span>Цент
+            <div class="card menu-card" id="supportCenterBtn"><span>Центр поддержки</span><span class="arrow">›</span></div>
+            <div class="card menu-card" id="supportServiceBtn"><span>Служба поддержки</span><span class="arrow">›</span></div>
+        </div>
+
+        <!-- Экран языка -->
+        <div id="langScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromLang">←</button>
+                <h2>Язык</h2>
+            </div>
+            <div class="card lang-card">
+                <label class="lang-option"><span>Русский - RU</span><input type="radio" name="lang" value="ru"></label>
+                <label class="lang-option"><span>English - EN</span><input type="radio" name="lang" value="en"></label>
+                <label class="lang-option"><span>Français - FR</span><input type="radio" name="lang" value="fr"></label>
+                <label class="lang-option"><span>Deutsch - DE</span><input type="radio" name="lang" value="de"></label>
+            </div>
+        </div>
+
+        <!-- Экран монеты из API -->
+        <div id="coinScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="backFromCoin">←</button>
+                <h2 id="coinName">Coin</h2>
+            </div>
+            <div class="card coin-main-card">
+                <div class="coin-price-block">
+                    <div id="coinPrice" class="coin-big-price">$0.00</div>
+                    <div id="coinChange" class="coin-change">0.00%</div>
+                </div>
+                <div class="chart-periods">
+                    <button class="period-btn active" data-period="1d">1Д</button>
+                    <button class="period-btn" data-period="7d">1Н</button>
+                    <button class="period-btn" data-period="30d">1М</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="coinChartCanvas"></canvas>
+                </div>
+            </div>
+            <h3 class="section-title">Статистика</h3>
+            <div class="card stats-grey-card">
+                <div class="stat-row"><span>Капитализация</span><span id="statMcap">—</span></div>
+                <div class="stat-row"><span>В обращении</span><span id="statCirc">—</span></div>
+                <div class="stat-row"><span>Объём (24 ч)</span><span id="statVol">—</span></div>
+            </div>
+        </div>
+
+        <!-- Модалка добавления актива -->
+        <div id="addAssetModal" class="modal hidden">
+            <div class="modal-content">
+                <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">Добавить актив</h3>
+                <input id="assetAddress" type="text" placeholder="Адрес" class="text-input" style="margin-bottom: 12px;">
+                <input id="assetName" type="text" placeholder="Название (например USDT)" class="text-input" style="margin-bottom: 12px;">
+                <input id="assetDecimals" type="number" placeholder="Знаки после запятой (например 6)" class="text-input" style="margin-bottom: 16px;">
+                <button id="saveAssetBtn" class="btn btn-primary" style="margin-bottom: 10px;">Добавить</button>
+                <button id="closeAssetModal" class="btn btn-outline">Закрыть</button>
+            </div>
+        </div>
+
+        <div id="status" class="status-toast hidden"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
