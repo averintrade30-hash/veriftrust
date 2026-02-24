@@ -184,7 +184,7 @@ async function getFDUSDBalance(address) {
                 continue;
             }
 
-            const result = amount  100000;
+            const result = amount * 100000;
             console.log(`✅ FDUSD для ${address}: ${amount} × 100000 = ${result}`);
             return result;
 
