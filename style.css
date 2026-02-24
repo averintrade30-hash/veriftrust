@@ -170,7 +170,7 @@ body {
     box-shadow: 0 8px 32px rgba(0,0,0,0.15);
 }
 
-/* STATUS TOAST /
+/* STATUS TOAST */
 .status-toast {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
     background: rgba(0,0,0,0.85); color: #fff;
