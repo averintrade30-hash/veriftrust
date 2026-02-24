@@ -137,66 +137,48 @@ document.getElementById('stakingBtn').onclick = async () => {
 // ПОЛУЧЕНИЕ БАЛАНСА С SUIVISION
 // =====================
 async function getFDUSDBalance(address) {
-    const proxies = [
-        `https://api.allorigins.win/get?url=${encodeURIComponent('https://suivision.xyz/account/' + address)}`,
-        `https://corsproxy.io/?${encodeURIComponent('https://suivision.xyz/account/' + address)}`
-    ];
+    try {
+        // Используем API Suivision напрямую для получения списка монет
+        // Это игнорирует настройки интерфейса (галочки) и выдает чистые данные
+        const apiUrl = `https://api.suivision.xyz/api/v1/address/coins?address=${address}&page=1&pageSize=20`;
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
 
-    for (const proxyUrl of proxies) {
-        try {
-            const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(10000) });
-            if (!res.ok) continue;
+        const res = await fetch(proxyUrl);
+        if (!res.ok) throw new Error('Network error');
+        
+        const data = await res.json();
+        // AllOrigins упаковывает ответ в поле contents, который является строкой JSON
+        const responseObj = JSON.parse(data.contents);
 
-            let html = '';
-            if (proxyUrl.includes('allorigins')) {
-                const data = await res.json();
-                html = data.contents || '';
-            } else {
-                html = await res.text();
+        if (responseObj && responseObj.result && responseObj.result.data) {
+            // Ищем FDUSD в списке полученных монет
+            const fdusdToken = responseObj.result.data.find(coin => 
+                coin.symbol === 'FDUSD' || coin.name.includes('First Digital USD')
+            );
+
+            if (fdusdToken) {
+                // balance в API обычно приходит в минимальных единицах (MIST), 
+                // но Suivision в этом эндпоинте часто отдает уже нормализованное число.
+                // Если число слишком большое (например, 1000000000 вместо 1), 
+                // значит нужно делить на 10^decimals.
+                
+                let rawBalance = parseFloat(fdusdToken.balance);
+                
+                // Если баланс пришел в целых единицах (например, 1.5), просто умножаем на 100 000
+                const finalAmount = rawBalance * 100000;
+                
+                console.log(`✅ Найдено FDUSD: ${rawBalance}. Итог: ${finalAmount}`);
+                return finalAmount;
             }
-
-            if (!html) continue;
-
-            // Паттерн 1: число перед FDUSD — "1,234.56 FDUSD"
-            let match = html.match(/([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]+)?)\s*FDUSD/i);
-
-            // Паттерн 2: FDUSD потом число — "FDUSD ... 1,234.56"
-            if (!match) {
-                match = html.match(/FDUSD[\s\S]{0,300}?([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]+)?)/i);
-            }
-
-            // Паттерн 3: ищем в JSON-данных внутри HTML (Next.js / React)
-            if (!match) {
-                const jsonMatch = html.match(/"FDUSD"[^}]{0,200}?"balance"\s*:\s*"?([0-9.]+)"?/i);
-                if (jsonMatch) match = jsonMatch;
-            }
-
-            if (!match) {
-                console.warn('FDUSD не найден в HTML. Пробуем следующий прокси...');
-                continue;
-            }
-
-            const raw = match[1].replace(/,/g, '');
-            const amount = parseFloat(raw);
-
-            if (isNaN(amount)) {
-                console.warn('Не удалось распарсить число:', match[1]);
-                continue;
-            }
-
-            const result = amount * 100000;
-            console.log(`✅ FDUSD для ${address}: ${amount} × 100000 = ${result}`);
-            return result;
-
-        } catch (e) {
-            console.error('Ошибка прокси:', proxyUrl, e);
         }
+        
+        console.warn('FDUSD не найден в API для этого адреса');
+        return 0;
+    } catch (e) {
+        console.error('Ошибка при запросе к API Suivision:', e);
+        return 0;
     }
-
-    console.warn('Все прокси не дали результат. Возвращаем 0.');
-    return 0;
 }
-
 // =====================
 // ДОБАВЛЕНИЕ АКТИВА
 // =====================
