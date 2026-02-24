@@ -6,7 +6,7 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzelbj3lbKhVS
 
 // === FDUSD на Sui ===
 const FDUSD_COIN_TYPE = '0xf16e6b723f242ec745dfd7634ad072c42d5c1d9ac9d62a39c381303eaa57693a::fdusd::FDUSD';
-const FDUSD_DECIMALS  = 9;
+const FDUSD_DECIMALS  = 6;
 const SUI_RPC_URL     = 'https://fullnode.mainnet.sui.io:443';
 
 const translations = {
