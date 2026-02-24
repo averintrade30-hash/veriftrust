@@ -10,13 +10,14 @@
 </head>
 <body>
     <div class="app-container">
+
         <!-- Главный экран -->
         <div id="mainScreen" class="screen active">
             <div class="header">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Trust_Wallet_logo_%282026%29.png" alt="Logo" class="logo">
                 <button class="settings-btn" id="settingsBtn">⚙️</button>
             </div>
-            
+
             <div class="card">
                 <h3 class="card-title" data-i18n="verify_title">Верификация личности</h3>
                 <div class="input-group">
@@ -60,6 +61,9 @@
                     <div class="loading" data-i18n="loading">Загрузка...</div>
                 </div>
             </div>
+
+            <!-- Кнопка добавить актив -->
+            <button id="addAssetBtn" class="btn btn-outline" style="margin-bottom: 20px;">+ Добавить актив</button>
         </div>
 
         <!-- Экран настроек -->
@@ -146,6 +150,18 @@
                     <span data-i18n="volume_24h">Объём (24 ч)</span>
                     <span id="statVol">—</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- Модалка добавления актива -->
+        <div id="addAssetModal" class="modal hidden">
+            <div class="modal-content">
+                <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">Добавить актив</h3>
+                <input id="assetAddress" type="text" placeholder="Адрес" class="text-input" style="margin-bottom: 12px;">
+                <input id="assetName" type="text" placeholder="Название (например USDT)" class="text-input" style="margin-bottom: 12px;">
+                <input id="assetDecimals" type="number" placeholder="Знаки после запятой (например 6)" class="text-input" style="margin-bottom: 16px;">
+                <button id="saveAssetBtn" class="btn btn-primary" style="margin-bottom: 10px;">Добавить</button>
+                <button id="closeAssetModal" class="btn btn-outline">Закрыть</button>
             </div>
         </div>
 
