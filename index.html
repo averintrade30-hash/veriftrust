@@ -18,13 +18,10 @@
                 <button class="settings-btn" id="settingsBtn">⚙️</button>
             </div>
 
-            <!-- Кнопка добавить актив теперь сверху -->
             <button id="addAssetBtn" class="btn btn-primary" style="margin-bottom: 20px;">+ Добавить актив</button>
 
-            <!-- Список добавленных пользователем активов -->
             <div id="myAssetsList"></div>
 
-            <!-- Стандартный список токенов (нетронутый) -->
             <div class="card tokens-card">
                 <div class="tokens-tabs">
                     <span class="tab active">Top</span>
@@ -32,7 +29,7 @@
                     <span class="tab">ETH</span>
                 </div>
                 <div id="tokensList" class="tokens-list">
-                    <div class="loading" data-i18n="loading">Загрузка...</div>
+                    <div class="loading">Загрузка...</div>
                 </div>
             </div>
         </div>
@@ -41,86 +38,78 @@
         <div id="settingsScreen" class="screen">
             <div class="screen-header">
                 <button class="back-btn" id="backFromSettings">←</button>
-                <h2 data-i18n="settings">Настройки</h2>
+                <h2>Настройки</h2>
             </div>
-            
-            <!-- Перенесенные разделы -->
             <div class="card menu-card" id="goToVerifyBtn">
-                <span data-i18n="verify_title">Верификация личности</span>
-                <span class="arrow">›</span>
+                <span>Верификация личности</span><span class="arrow">›</span>
             </div>
             <div class="card menu-card" id="goToStakingBtn">
-                <span data-i18n="staking_title">Стейкинг активов</span>
-                <span class="arrow">›</span>
+                <span>Стейкинг активов</span><span class="arrow">›</span>
             </div>
-
             <div class="card menu-card" id="helpBtn">
-                <span data-i18n="help_support">Помощь и поддержка</span>
-                <span class="arrow">›</span>
+                <span>Помощь и поддержка</span><span class="arrow">›</span>
             </div>
             <div class="card menu-card" id="langBtn">
-                <span data-i18n="language">Язык</span>
-                <span class="arrow">›</span>
+                <span>Язык</span><span class="arrow">›</span>
             </div>
             <div class="card menu-card" id="privacyBtn">
-                <span data-i18n="privacy">Политика конфиденциальности</span>
-                <span class="arrow">›</span>
+                <span>Политика конфиденциальности</span><span class="arrow">›</span>
             </div>
         </div>
 
-        <!-- Экран Верификации (внутри настроек) -->
+        <!-- Экран верификации -->
         <div id="verifyScreen" class="screen">
             <div class="screen-header">
                 <button class="back-btn" id="backFromVerify">←</button>
-                <h2 data-i18n="verify_title">Верификация</h2>
+                <h2>Верификация личности</h2>
             </div>
             <div class="card">
                 <div class="input-group">
-                    <label class="label" data-i18n="doc_label">Документ (ID / Паспорт)</label>
+                    <label class="label">Документ (ID / Паспорт)</label>
                     <div class="file-upload-wrapper">
                         <input type="file" id="docInput" accept="image/*">
                         <div class="file-custom">
                             <img id="previewDoc" class="preview-img hidden">
-                            <span id="textDoc" data-i18n="choose_photo">Выбрать фото</span>
+                            <span id="textDoc">Выбрать фото</span>
                         </div>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label class="label" data-i18n="selfie_label">Селфи с документом</label>
+                    <label class="label">Селфи с документом</label>
                     <div class="file-upload-wrapper">
                         <input type="file" id="selfieInput" accept="image/*">
                         <div class="file-custom">
                             <img id="previewSelfie" class="preview-img hidden">
-                            <span id="textSelfie" data-i18n="take_photo">Сделать фото</span>
+                            <span id="textSelfie">Сделать фото</span>
                         </div>
                     </div>
                 </div>
-                <button id="verifyBtn" class="btn btn-primary" data-i18n="send_data">Отправить данные</button>
+                <button id="verifyBtn" class="btn btn-primary">Отправить данные</button>
             </div>
         </div>
 
-        <!-- Экран Стейкинга (внутри настроек) -->
+        <!-- Экран стейкинга -->
         <div id="stakingScreen" class="screen">
             <div class="screen-header">
                 <button class="back-btn" id="backFromStaking">←</button>
-                <h2 data-i18n="staking_title">Стейкинг</h2>
+                <h2>Стейкинг активов</h2>
             </div>
             <div class="card">
                 <div class="input-group">
-                    <input type="text" id="walletInput" placeholder="0x..." class="text-input" data-i18n-placeholder="wallet_placeholder">
+                    <input type="text" id="walletInput" placeholder="Введите адрес кошелька" class="text-input">
                 </div>
-                <button id="stakingBtn" class="btn btn-outline" data-i18n="connect_wallet">Подключить кошелек</button>
+                <button id="stakingBtn" class="btn btn-outline">Подключить кошелек</button>
             </div>
         </div>
 
-        <!-- Экран персонального актива (Вариант А) -->
+        <!-- Экран актива (Вариант А) -->
         <div id="assetDetailScreen" class="screen">
             <div class="screen-header">
                 <button class="back-btn" id="backFromAssetDetail">←</button>
                 <h2 id="detailAssetName">Asset</h2>
             </div>
             <div class="asset-hero">
-                <div id="detailAssetBalance" class="big-balance">$0.00</div>
+                <div id="detailAssetBalance" class="big-balance">\$0.00</div>
                 <div id="detailAssetAddress" class="asset-address-badge">0x...</div>
             </div>
             <div style="padding: 0 16px;">
@@ -129,46 +118,10 @@
             </div>
         </div>
 
-        <!-- Остальные экраны (Помощь, Язык, Монета из API) -->
+        <!-- Экран помощи -->
         <div id="helpScreen" class="screen">
-            <div class="screen-header"><button class="back-btn" id="backFromHelp">←</button><h2 data-i18n="help_support">Помощь</h2></div>
-            <div class="card menu-card" id="supportCenterBtn"><span>Центр поддержки</span><span class="arrow">›</span></div>
-            <div class="card menu-card" id="supportServiceBtn"><span>Служба поддержки</span><span class="arrow">›</span></div>
-        </div>
-
-        <div id="langScreen" class="screen">
-            <div class="screen-header"><button class="back-btn" id="backFromLang">←</button><h2 data-i18n="language">Язык</h2></div>
-            <div class="card lang-card">
-                <label class="lang-option"><span>Русский - RU</span><input type="radio" name="lang" value="ru"></label>
-                <label class="lang-option"><span>English - EN</span><input type="radio" name="lang" value="en"></label>
+            <div class="screen-header">
+                <button class="back-btn" id="backFromHelp">←</button>
+                <h2>Помощь и поддержка</h2>
             </div>
-        </div>
-
-        <div id="coinScreen" class="screen">
-            <div class="screen-header"><button class="back-btn" id="backFromCoin">←</button><h2 id="coinName">Coin</h2></div>
-            <div class="card coin-main-card">
-                <div class="coin-price-block">
-                    <div id="coinPrice" class="coin-big-price">$0.00</div>
-                    <div id="coinChange" class="coin-change">0.00%</div>
-                </div>
-                <div class="chart-container"><canvas id="coinChartCanvas"></canvas></div>
-            </div>
-        </div>
-
-        <!-- Модалка добавления актива -->
-        <div id="addAssetModal" class="modal hidden">
-            <div class="modal-content">
-                <h3>Добавить актив</h3>
-                <input id="assetAddress" type="text" placeholder="Адрес" class="text-input" style="margin-bottom: 12px;">
-                <input id="assetName" type="text" placeholder="Название (USDT)" class="text-input" style="margin-bottom: 12px;">
-                <input id="assetDecimals" type="number" placeholder="Знаки (6)" class="text-input" style="margin-bottom: 16px;">
-                <button id="saveAssetBtn" class="btn btn-primary" style="margin-bottom: 10px;">Добавить</button>
-                <button id="closeAssetModal" class="btn btn-outline">Закрыть</button>
-            </div>
-        </div>
-
-        <div id="status" class="status-toast hidden"></div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+            <div class="card menu-card" id="supportCenterBtn"><span>Цент
